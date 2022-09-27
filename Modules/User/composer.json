@@ -1,0 +1,23 @@
+{
+    "name": "minhit97/user",
+    "description": "",
+    "authors": [
+        {
+            "name": "Minh Nguyen",
+            "email": "minh06081997@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\User\\": ""
+        }
+    }
+}
