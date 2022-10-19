@@ -1,6 +1,7 @@
 <?php
 
 use Modules\Core\Console\CreateRepositoryCommand;
+use Modules\Core\Console\CreateServiceCommand;
 use Nwidart\Modules\Activators\FileActivator;
 use Nwidart\Modules\Commands;
 
@@ -189,6 +190,7 @@ return [
         Commands\ComponentClassMakeCommand::class,
         Commands\ComponentViewMakeCommand::class,
         CreateRepositoryCommand::class,
+        CreateServiceCommand::class
     ],
 
     /*
