@@ -1,8 +1,10 @@
 <?php
 
-namespace Modules\User\Repositories;
+namespace Modules\User\Repositories\Admin;
 
-use Modules\User\Repositories\UserRepository;
+use Carbon\Carbon;
+use Modules\User\Entities\User;
+use Modules\User\Repositories\Admin\UserRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Eloquent\BaseRepository;
 
@@ -34,8 +36,12 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
-    public function login()
+    public function verifyEmail($user)
     {
-
+        $user->email_verified    = 1;
+        $user->status            = 1;
+        $user->email_verified_at = Carbon::now();
+        $user->save();
+        return $user;
     }
 }

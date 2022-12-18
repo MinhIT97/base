@@ -121,17 +121,13 @@ class CreateRepositoryCommand extends Command
 
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
 
-
         $name_space = $this->getClassNamespace($module) . '\Repositories';
 
-        $names               = $repository_names;
-        $class_name          = $this->getRepositoryName();
-        $repository_template = str_replace('{{name}}', $class_name, $stub);
-        $repository_template = str_replace('$CLASS_NAMESPACE$', $name_space, $repository_template);
+        $names      = $repository_names;
+        $class_name = $this->getRepositoryName();
 
         $file_system  = app(Filesystem::class);
         $package_path = base_path() . '/' . $this->laravel['modules']->config('namespace') . '/' . $package_name;
-
 
         $repository_folder_path = $package_path . '/Repositories';
 
@@ -140,6 +136,19 @@ class CreateRepositoryCommand extends Command
         }
 
         $repository_folder_path = $repository_folder_path;
+
+        $arrayClassName = explode('/', $class_name);
+
+        if (count($arrayClassName) > 1) {
+            $arrayClassName         = collect($arrayClassName);
+            $class_name             = $arrayClassName->pop();
+            $endNameFolder          = implode('/', $arrayClassName->all());
+            $repository_folder_path = $repository_folder_path . '/' . $endNameFolder;
+        }
+
+        $repository_template = str_replace('{{name}}', $class_name, $stub);
+        $repository_template = str_replace('$CLASS_NAMESPACE$', $name_space . '\\' . $endNameFolder, $repository_template);
+
 
 
         if (!$file_system->isDirectory($repository_folder_path)) {
@@ -157,9 +166,9 @@ class CreateRepositoryCommand extends Command
 
     public function getClassNamespace($module)
     {
-        $extra = str_replace($this->getClass(), '', $this->argument($this->argumentName));
+        // $extra = str_replace($this->getClass(), '', $this->argument($this->argumentName));
 
-        $extra = str_replace('/', '\\', $extra);
+        // $extra = str_replace('/', '\\', $extra);
 
         $namespace = $this->laravel['modules']->config('namespace');
 
@@ -167,10 +176,9 @@ class CreateRepositoryCommand extends Command
 
         // $namespace .= '\\' . $this->getDefaultNamespace();
 
-        $namespace .= '\\' . $extra;
+        // $namespace .= '\\' . $extra;
 
         $namespace = str_replace('/', '\\', $namespace);
-
         return trim($namespace, '\\');
     }
 

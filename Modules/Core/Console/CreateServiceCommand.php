@@ -52,7 +52,7 @@ class CreateServiceCommand extends Command
         $service_stub = $this->getServiceStub();
 
         try {
-            $this->makeRepository($this->getModuleName(), $serviceName, $service_stub);
+            $this->makeService($this->getModuleName(), $serviceName, $service_stub);
         } catch (Exception $e) {
             $this->error($e->getMessage());
             return 1;
@@ -104,17 +104,15 @@ class CreateServiceCommand extends Command
      *
      * @return void
      */
-    protected function makeRepository($package_name, $service_names, $stub)
+    protected function makeService($package_name, $service_names, $stub)
     {
 
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
 
         $name_space = $this->getClassNamespace($module) . '\Services';
 
-        $names            = $service_names;
-        $class_name       = $this->getServiceName();
-        $service_template = str_replace('{{name}}', $class_name, $stub);
-        $service_template = str_replace('$CLASS_NAMESPACE$', $name_space, $service_template);
+        $names      = $service_names;
+        $class_name = $this->getServiceName();
 
         $file_system  = app(Filesystem::class);
         $package_path = base_path() . '/' . $this->laravel['modules']->config('namespace') . '/' . $package_name;
@@ -126,6 +124,18 @@ class CreateServiceCommand extends Command
         }
 
         $service_folder_path = $service_folder_path;
+
+        $arrayClassName = explode('/', $class_name);
+
+        if (count($arrayClassName) > 1) {
+            $arrayClassName      = collect($arrayClassName);
+            $class_name          = $arrayClassName->pop();
+            $endNameFolder       = implode('/', $arrayClassName->all());
+            $service_folder_path = $service_folder_path . '/' . $endNameFolder;
+        }
+
+        $service_template = str_replace('{{name}}', $class_name, $stub);
+        $service_template = str_replace('$CLASS_NAMESPACE$', $name_space . '\\' . $endNameFolder, $service_template);
 
         if (!$file_system->isDirectory($service_folder_path)) {
             $file_system->makeDirectory($service_folder_path, 0755, true);
@@ -148,9 +158,9 @@ class CreateServiceCommand extends Command
 
     public function getClassNamespace($module)
     {
-        $extra = str_replace($this->getClass(), '', $this->argument($this->argumentName));
+        // $extra = str_replace($this->getClass(), '', $this->argument($this->argumentName));
 
-        $extra = str_replace('/', '\\', $extra);
+        // $extra = str_replace('/', '\\', $extra);
 
         $namespace = $this->laravel['modules']->config('namespace');
 
@@ -158,7 +168,7 @@ class CreateServiceCommand extends Command
 
         // $namespace .= '\\' . $this->getDefaultNamespace();
 
-        $namespace .= '\\' . $extra;
+        // $namespace .= '\\' . $extra;
 
         $namespace = str_replace('/', '\\', $namespace);
 

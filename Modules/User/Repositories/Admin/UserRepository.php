@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\User\Repositories;
+namespace Modules\User\Repositories\Admin;
 
 use Prettus\Repository\Contracts\RepositoryInterface;
 
@@ -9,5 +9,5 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface UserRepository extends RepositoryInterface
 {
-    public function login();
+    public function verifyEmail($user);
 }
