@@ -10,7 +10,7 @@ use Nwidart\Modules\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-class CreateTraitCommand extends Command
+class CreateTransformerCommand extends Command
 {
 
     use ModuleCommandTrait;
@@ -19,7 +19,7 @@ class CreateTraitCommand extends Command
      *
      * @var string
      */
-    protected $name = 'module:make-trait';
+    protected $name = 'module:make-transformer';
 
     protected $argumentName = 'trait';
 
@@ -28,7 +28,7 @@ class CreateTraitCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Create trait command';
+    protected $description = 'Command description.';
 
     /**
      * Create a new command instance.
@@ -47,24 +47,23 @@ class CreateTraitCommand extends Command
      */
     public function handle()
     {
-
-        $traitStub = $this->getTraitStub();
+        $transformerStub = $this->getTransformerStub();
 
         try {
-            $this->makeTrait($this->getModuleName(), $traitStub);
+            $this->makeTrait($this->getModuleName(), $transformerStub);
         } catch (Exception $e) {
             $this->error($e->getMessage());
             return 1;
         }
 
-        $this->info('Trait generate successful');
+        $this->info('Transformer generate successful');
 
         return 0;
     }
 
-    protected function getTraitStub()
+    protected function getTransformerStub()
     {
-        return app(Filesystem::class)->get(config('core.stubs.trait'));
+        return app(Filesystem::class)->get(config('core.stubs.transformers'));
     }
 
     protected function makeTrait($packageName, $stub)
@@ -72,40 +71,40 @@ class CreateTraitCommand extends Command
 
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
 
-        $nameSpace = $this->getClassNamespace($module) . '\Traits';
+        $nameSpace = $this->getClassNamespace($module) . '\Transformers';
 
-        $class_name = $this->getTraitName();
+        $class_name = $this->getTransfomerName();
 
         $file_system  = app(Filesystem::class);
         $package_path = base_path() . '/' . $this->laravel['modules']->config('namespace') . '/' . $packageName;
 
-        $traitFolder_path = $package_path . '/Traits';
+        $transfomerFolderPath = $package_path . '/Transformers';
 
         if (!$file_system->isDirectory($package_path)) {
             throw new Exception('Package does not exist');
         }
 
-        $traitFolder_path = $traitFolder_path;
+        $transfomerFolderPath = $transfomerFolderPath;
 
         $arrayClassName = explode('/', $class_name);
 
         $traitFemplate = str_replace('{{name}}', $class_name, $stub);
 
         if (count($arrayClassName) > 1) {
-            $arrayClassName   = collect($arrayClassName);
-            $class_name       = $arrayClassName->pop();
-            $endNameFolder    = implode('/', $arrayClassName->all());
-            $traitFolder_path = $traitFolder_path . '/' . $endNameFolder;
-            $traitFemplate    = str_replace('$CLASS_NAMESPACE$', $nameSpace . '\\' . $endNameFolder, $traitFemplate);
+            $arrayClassName       = collect($arrayClassName);
+            $class_name           = $arrayClassName->pop();
+            $endNameFolder        = implode('/', $arrayClassName->all());
+            $transfomerFolderPath = $transfomerFolderPath . '/' . $endNameFolder;
+
         } else {
             $traitFemplate = str_replace('$CLASS_NAMESPACE$', $nameSpace, $traitFemplate);
         }
 
-        if (!$file_system->isDirectory($traitFolder_path)) {
-            $file_system->makeDirectory($traitFolder_path, 0755, true);
+        if (!$file_system->isDirectory($transfomerFolderPath)) {
+            $file_system->makeDirectory($transfomerFolderPath, 0755, true);
         }
 
-        $file_path = $traitFolder_path . '/' . $class_name . 'Trait.php';
+        $file_path = $transfomerFolderPath . '/' . $class_name . 'Transformer.php';
 
         if ($file_system->isFile($file_path)) {
             throw new Exception('Trait already existed');
@@ -114,9 +113,9 @@ class CreateTraitCommand extends Command
         $file_system->put($file_path, $traitFemplate);
     }
 
-    protected function getTraitName()
+    protected function getTransfomerName()
     {
-        $trait = Str::studly($this->argument('trait'));
+        $trait = Str::studly($this->argument('transformer'));
         return $trait;
     }
 
@@ -143,6 +142,7 @@ class CreateTraitCommand extends Command
     {
         return class_basename($this->argument($this->argumentName));
     }
+
     /**
      * Get the console command arguments.
      *
@@ -151,7 +151,7 @@ class CreateTraitCommand extends Command
     protected function getArguments()
     {
         return [
-            ['trait', InputArgument::REQUIRED, 'The name of the controller class.'],
+            ['transformer', InputArgument::REQUIRED, 'The name of the controller class.'],
             ['module', InputArgument::OPTIONAL, 'The name of module will be used.'],
         ];
     }

@@ -127,15 +127,16 @@ class CreateServiceCommand extends Command
 
         $arrayClassName = explode('/', $class_name);
 
+        $service_template = str_replace('{{name}}', $class_name, $stub);
         if (count($arrayClassName) > 1) {
             $arrayClassName      = collect($arrayClassName);
             $class_name          = $arrayClassName->pop();
             $endNameFolder       = implode('/', $arrayClassName->all());
             $service_folder_path = $service_folder_path . '/' . $endNameFolder;
+            $service_template    = str_replace('$CLASS_NAMESPACE$', $name_space . '\\' . $endNameFolder, $service_template);
+        } else {
+            $service_template = str_replace('$CLASS_NAMESPACE$', $name_space, $service_template);
         }
-
-        $service_template = str_replace('{{name}}', $class_name, $stub);
-        $service_template = str_replace('$CLASS_NAMESPACE$', $name_space . '\\' . $endNameFolder, $service_template);
 
         if (!$file_system->isDirectory($service_folder_path)) {
             $file_system->makeDirectory($service_folder_path, 0755, true);

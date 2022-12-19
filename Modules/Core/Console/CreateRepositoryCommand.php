@@ -139,17 +139,16 @@ class CreateRepositoryCommand extends Command
 
         $arrayClassName = explode('/', $class_name);
 
+        $repository_template = str_replace('{{name}}', $class_name, $stub);
         if (count($arrayClassName) > 1) {
             $arrayClassName         = collect($arrayClassName);
             $class_name             = $arrayClassName->pop();
             $endNameFolder          = implode('/', $arrayClassName->all());
             $repository_folder_path = $repository_folder_path . '/' . $endNameFolder;
+            $repository_template    = str_replace('$CLASS_NAMESPACE$', $name_space . '\\' . $endNameFolder, $repository_template);
+        } else {
+            $repository_template = str_replace('$CLASS_NAMESPACE$', $name_space, $repository_template);
         }
-
-        $repository_template = str_replace('{{name}}', $class_name, $stub);
-        $repository_template = str_replace('$CLASS_NAMESPACE$', $name_space . '\\' . $endNameFolder, $repository_template);
-
-
 
         if (!$file_system->isDirectory($repository_folder_path)) {
             $file_system->makeDirectory($repository_folder_path, 0755, true);

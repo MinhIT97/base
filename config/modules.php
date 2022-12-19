@@ -3,6 +3,7 @@
 use Modules\Core\Console\CreateRepositoryCommand;
 use Modules\Core\Console\CreateServiceCommand;
 use Modules\Core\Console\CreateTraitCommand;
+use Modules\Core\Console\CreateTransformerCommand;
 use Nwidart\Modules\Activators\FileActivator;
 use Nwidart\Modules\Commands;
 
@@ -192,7 +193,8 @@ return [
         Commands\ComponentViewMakeCommand::class,
         CreateRepositoryCommand::class,
         CreateServiceCommand::class,
-        CreateTraitCommand::class
+        CreateTraitCommand::class,
+        CreateTransformerCommand::class,
     ],
 
     /*
