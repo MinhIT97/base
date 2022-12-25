@@ -14,10 +14,18 @@
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
-    $api->group(['prefix' => 'users', 'middleware' => 'api'], function ($api) {
-        $api->post('login', 'Modules\User\Http\Controllers\User\AuthController@login');
+    $api->group(['prefix' => 'users'], function ($api) {
+        $api->post('/register', 'Modules\User\Http\Controllers\User\AuthController@store');
     });
 });
+
+$api->version('v1', function ($api) {
+    $api->group(['prefix' => 'users', 'middleware' => 'api'], function ($api) {
+        $api->post('login', 'Modules\User\Http\Controllers\User\AuthController@login');
+        $api->post('me', 'Modules\User\Http\Controllers\User\AuthController@me');
+    });
+});
+
 $api->version('v1', function ($api) {
     $api->group(['prefix' => 'admin', 'middleware' => 'api'], function ($api) {
         $api->post('login', 'Modules\User\Http\Controllers\Admin\AuthController@login');

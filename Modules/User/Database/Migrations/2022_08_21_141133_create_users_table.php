@@ -23,14 +23,14 @@ class CreateUsersTable extends Migration
             $table->string('first_name', 100)->nullable();
             $table->string('last_name', 100)->nullable();
             $table->date('birth')->nullable();
-            $table->integer('gender')->nullable();
+            $table->tinyInteger('gender')->default(0)->nullable();
             $table->string('password', 100)->nullable();
             $table->dateTime('last_login')->nullable();
             $table->boolean('email_verified')->default(0);
             $table->string('account_type')->default('normal')->comment('normal, facebook, google, ...');
             $table->string('social_id')->nullable();
             $table->string('avatar')->nullable();
-            $table->integer('status')->nullable();
+            $table->tinyInteger('status')->default(0)->nullable();
             $table->string('verify_token');
             $table->rememberToken();
             $table->timestamps();
