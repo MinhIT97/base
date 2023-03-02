@@ -17,6 +17,7 @@ class AuthController extends ApiController
 
     use AuthTrait;
     protected $userRepository;
+    protected $transformer;
 
     public function __construct(UserRepository $userRepository)
     {
@@ -43,7 +44,7 @@ class AuthController extends ApiController
         return $this->response->array([
             'token'      => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60,
+            // 'expires_in' => auth('api')->factory()->getTTL() * 60,
         ]);
     }
     /**

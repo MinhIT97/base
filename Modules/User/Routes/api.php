@@ -20,14 +20,15 @@ $api->version('v1', function ($api) {
 });
 
 $api->version('v1', function ($api) {
+
     $api->group(['prefix' => 'users', 'middleware' => 'api'], function ($api) {
         $api->post('login', 'Modules\User\Http\Controllers\User\AuthController@login');
-        $api->post('me', 'Modules\User\Http\Controllers\User\AuthController@me');
+        $api->get('me', 'Modules\User\Http\Controllers\User\AuthController@me');
     });
 });
 
 $api->version('v1', function ($api) {
-    $api->group(['prefix' => 'admin', 'middleware' => 'api'], function ($api) {
+    $api->group(['prefix' => 'v1/admin', 'middleware' => 'api'], function ($api) {
         $api->post('login', 'Modules\User\Http\Controllers\Admin\AuthController@login');
         $api->post('/users', 'Modules\User\Http\Controllers\Admin\AuthController@store');
     });
