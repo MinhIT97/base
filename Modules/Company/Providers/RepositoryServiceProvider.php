@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Providers;
+namespace Modules\Company\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\Company\Repositories\CompanyRepository;
+use Modules\Company\Repositories\CompanyRepositoryEloquent;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -23,7 +25,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind(\Modules\Company\CompanyRepository::class, \Modules\Company\CompanyRepositoryEloquent::class);
+        $this->app->bind(CompanyRepository::class, CompanyRepositoryEloquent::class);
         //:end-bindings:
     }
 }

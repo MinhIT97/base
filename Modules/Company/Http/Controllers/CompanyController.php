@@ -4,46 +4,44 @@ namespace Modules\Company\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Modules\Company\Http\Requests\StoreCompanyRequest;
+use Modules\Company\Http\Requests\UpdateCompanyRequest;
+use Modules\Company\Presenters\CompanyPresenter;
+use Modules\Company\Repositories\CompanyRepository;
+use Modules\Core\Http\Controllers\ApiController;
 
-class CompanyController extends Controller
+class CompanyController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
+
+    protected $companyRepository;
+    protected $companyPresenter;
+    public function __construct(CompanyRepository $companyRepository)
+    {
+        $this->companyRepository = $companyRepository;
+        $this->companyPresenter  = new CompanyPresenter();
+
+    }
+
     public function index()
     {
-        return view('company::index');
+        $companies = $this->companyRepository->paginate(10);
+
+        return $this->companyPresenter->present($companies);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
+    public function store(StoreCompanyRequest $request)
     {
-        return view('company::create');
+        $data    = $request->all();
+        $company = $this->companyRepository->create($data);
+
+        return $this->companyPresenter->present($company);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function show($id)
     {
-        return view('company::show');
+        $company = $this->companyRepository->find($id);
+
+        return $this->companyPresenter->present($company);
     }
 
     /**
@@ -62,9 +60,14 @@ class CompanyController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCompanyRequest $request, $id)
     {
-        //
+        $data = $request->all();
+
+        $company = $this->companyRepository->find($id);
+        $company->update($data);
+
+        return $this->companyPresenter->present($company);
     }
 
     /**
@@ -74,6 +77,7 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $company = $this->companyRepository->delete($id);
+        return $this->success();
     }
 }

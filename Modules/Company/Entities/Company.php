@@ -20,6 +20,13 @@ class Company extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'name',
+        'email',
+        'phone_number',
+        'address',
+        'avatar',
+        'fax',
+    ];
 
 }
