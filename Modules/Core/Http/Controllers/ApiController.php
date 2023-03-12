@@ -68,15 +68,24 @@ class ApiController extends Controller
         return $query;
     }
 
+    // public function applyOrderByFromRequest($query, Request $request)
+    // {
+    //     if ($request->has('order_by')) {
+    //         $orderBy = (array) json_decode($request->get('order_by'));
+    //         if (count($orderBy) > 0) {
+    //             foreach ($orderBy as $key => $value) {
+    //                 $query = $query->orderBy($key, $value);
+    //             }
+    //         }
+    //     } else {
+    //         $query = $query->orderBy('id', 'desc');
+    //     }
+    //     return $query;
+    // }
     public function applyOrderByFromRequest($query, Request $request)
     {
-        if ($request->has('order_by')) {
-            $orderBy = (array) json_decode($request->get('order_by'));
-            if (count($orderBy) > 0) {
-                foreach ($orderBy as $key => $value) {
-                    $query = $query->orderBy($key, $value);
-                }
-            }
+        if ($request->has('order_by') && $request->has('order') && !empty($request->get('order_by')) && !empty($request->get('order'))) {
+            $query = $query->orderBy($request->get('order_by'), $request->get('order'));
         } else {
             $query = $query->orderBy('id', 'desc');
         }

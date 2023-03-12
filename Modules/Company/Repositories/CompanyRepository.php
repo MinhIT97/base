@@ -11,5 +11,6 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface CompanyRepository extends RepositoryInterface
 {
+    public function getEntity();
 
 }

@@ -15,16 +15,26 @@ class CompanyController extends ApiController
 
     protected $companyRepository;
     protected $companyPresenter;
+    protected $entity;
     public function __construct(CompanyRepository $companyRepository)
     {
         $this->companyRepository = $companyRepository;
+        $this->entity            = $companyRepository->getEntity();
         $this->companyPresenter  = new CompanyPresenter();
 
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $companies = $this->companyRepository->paginate(10);
+        $limit = $request->has('limit') ? (int) $request->get('limit') : 15;
+
+        $query = $this->companyRepository;
+
+        $query = $this->applyConstraintsFromRequest($query, $request);
+        $query = $this->applySearchFromRequest($query, ['name'], $request);
+        $query = $this->applyOrderByFromRequest($query, $request);
+
+        $companies = $query->paginate($limit);
 
         return $this->companyPresenter->present($companies);
     }

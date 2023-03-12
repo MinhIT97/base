@@ -22,7 +22,10 @@ class CompanyRepositoryEloquent extends BaseRepository implements CompanyReposit
     {
         return Company::class;
     }
-
+    public function getEntity()
+    {
+        return $this->model;
+    }
     /**
      * Boot up the repository, pushing criteria
      */
