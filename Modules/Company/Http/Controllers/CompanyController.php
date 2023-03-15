@@ -26,11 +26,11 @@ class CompanyController extends ApiController
 
     public function index(Request $request)
     {
-        $limit = $request->has('limit') ? (int) $request->get('limit') : 15;
+        $limit = $request->has('page_size') ? (int) $request->get('page_size') : 15;
 
         $query = $this->companyRepository;
 
-        $query = $this->applyConstraintsFromRequest($query, $request);
+        $query = $this->applyConstraintsFromRequest($query, $request, ['name', 'phone_number', 'email']);
         $query = $this->applySearchFromRequest($query, ['name'], $request);
         $query = $this->applyOrderByFromRequest($query, $request);
 

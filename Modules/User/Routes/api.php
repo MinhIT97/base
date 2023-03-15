@@ -27,6 +27,8 @@ $api->version('v1', function ($api) {
     });
 });
 
+//admin
+
 $api->version('v1', function ($api) {
     $api->group(['prefix' => 'v1/admin', 'middleware' => 'api'], function ($api) {
         $api->post('login', 'Modules\User\Http\Controllers\Admin\AuthController@login');

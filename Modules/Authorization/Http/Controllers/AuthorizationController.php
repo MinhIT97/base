@@ -1,31 +1,20 @@
 <?php
 
-namespace Modules\User\Http\Controllers\User;
+namespace Modules\Authorization\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\User\Repositories\User\UserRepository;
 
-class UserController extends Controller
+class AuthorizationController extends Controller
 {
-
-    protected $userRepository;
-    protected $transformer;
-
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-        $this->transformer    = UserTransformer::class;
-        $this->middleware('auth:api', ['except' => ['login']]);
-    }
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
     public function index()
     {
-        return view('user::index');
+        return view('authorization::index');
     }
 
     /**
@@ -34,7 +23,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('user::create');
+        return view('authorization::create');
     }
 
     /**
@@ -48,13 +37,23 @@ class UserController extends Controller
     }
 
     /**
+     * Show the specified resource.
+     * @param int $id
+     * @return Renderable
+     */
+    public function show($id)
+    {
+        return view('authorization::show');
+    }
+
+    /**
      * Show the form for editing the specified resource.
      * @param int $id
      * @return Renderable
      */
     public function edit($id)
     {
-        return view('user::edit');
+        return view('authorization::edit');
     }
 
     /**

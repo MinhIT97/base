@@ -1,20 +1,33 @@
 <?php
 
-namespace Modules\User\Http\Controllers\Admin;
+namespace Modules\Authorization\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Modules\Authorization\Entities\Role;
+use Modules\Authorization\Presenters\RolePresenter;
+use Modules\Authorization\Repositories\RoleRepository;
+use Modules\Core\Http\Controllers\ApiController;
 
-class RoleController extends Controller
+class RoleController extends ApiController
 {
+
+    protected $roleRepository;
+    protected $rolePresenter;
+    public function __construct(RoleRepository $roleRepository)
+    {
+        $this->roleRepository = $roleRepository;
+        $this->rolePresenter  = new RolePresenter();
+
+    }
+
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
     public function index()
     {
-        return view('user::index');
+        return view('authorization::index');
     }
 
     /**
@@ -23,7 +36,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('user::create');
+        return view('authorization::create');
     }
 
     /**
@@ -33,7 +46,14 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = $this->getAuthenticatedUser();
+        $role = Role::query()->create([
+            'name'        => 'test 1',
+            'status'      => 1,
+            'description' => 1,
+            'level'       => 1,
+        ]);
+        return $role;
     }
 
     /**
@@ -43,7 +63,7 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        return view('user::show');
+        return view('authorization::show');
     }
 
     /**
@@ -53,7 +73,7 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        return view('user::edit');
+        return view('authorization::edit');
     }
 
     /**

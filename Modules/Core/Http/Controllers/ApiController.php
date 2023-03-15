@@ -92,14 +92,19 @@ class ApiController extends Controller
         return $query;
     }
 
-    public function applyConstraintsFromRequest($query, Request $request)
+    public function applyConstraintsFromRequest($query, Request $request, $keyFilter)
     {
         if ($request->has('constraints')) {
-            $constraints = (array) json_decode($request->get('constraints'));
-            if (count($constraints)) {
-                $query = $query->where($constraints);
+            $constraints = (array) ($request->get('constraints'));
+
+            // Lấy các phần tử trong mảng $constraints theo các khóa đã cho
+            $constraintsCollect = collect($constraints)->only($keyFilter)->toArray();
+
+            if (!empty($constraintsCollect)) {
+                $query = $query->where($constraintsCollect);
             }
         }
+
         return $query;
     }
 
