@@ -4,12 +4,13 @@ namespace Modules\User\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Prettus\Repository\Traits\TransformableTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-class User extends Authenticatable  implements JWTSubject
+
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, TransformableTrait;
 
@@ -29,6 +30,7 @@ class User extends Authenticatable  implements JWTSubject
         'email_verified_at',
         "email_verified",
         'verify_token',
+        'company_id',
     ];
     /**
      * The attributes excluded from the model's JSON form.
@@ -38,11 +40,6 @@ class User extends Authenticatable  implements JWTSubject
     protected $hidden = [
         'password',
     ];
-
-    protected static function newFactory()
-    {
-        return \Modules\User\Database\factories\UserFactory::new ();
-    }
 
     public function setPasswordAttribute($value)
     {

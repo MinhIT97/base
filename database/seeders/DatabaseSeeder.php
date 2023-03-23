@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\Authorization\Database\Seeders\AuthorizationDatabaseSeeder;
+use Modules\Company\Database\Seeders\CompanyDatabaseSeeder;
+use Modules\User\Database\Seeders\UserDatabaseSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,6 +16,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call([
+            CompanyDatabaseSeeder::class,
+            UserDatabaseSeeder::class,
+            AuthorizationDatabaseSeeder::class,
+        ]);
     }
 }

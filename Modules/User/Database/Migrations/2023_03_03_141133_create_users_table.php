@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('company_id');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('email', 40)->nullable();
             $table->string('phone_number', 40)->nullable();
@@ -33,8 +34,9 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('status')->default(0)->nullable();
             $table->string('verify_token');
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
-            // $table->foreign('gender')->references('id')->on('genders');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
     }
 

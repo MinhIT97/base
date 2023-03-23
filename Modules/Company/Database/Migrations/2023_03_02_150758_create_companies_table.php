@@ -21,6 +21,7 @@ class CreateCompaniesTable extends Migration
             $table->string('address')->nullable();
             $table->string('avatar')->nullable();
             $table->string('fax')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

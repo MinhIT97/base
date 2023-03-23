@@ -2,8 +2,8 @@
 
 namespace Modules\Authorization\Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Seeder;
 
 class AuthorizationDatabaseSeeder extends Seeder
 {
@@ -16,6 +16,8 @@ class AuthorizationDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call([
+            SeedPermissionTableSeeder::class,
+        ]);
     }
 }
