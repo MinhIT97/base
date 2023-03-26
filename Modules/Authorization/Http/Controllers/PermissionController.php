@@ -4,36 +4,33 @@ namespace Modules\Authorization\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Modules\Authorization\Presenters\PermissionPresenter;
+use Modules\Authorization\Repositories\PermissionRepository;
+use Modules\Core\Http\Controllers\ApiController;
 
-class PermissionController extends Controller
+class PermissionController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
-    public function index()
+
+    protected $permissionRepository;
+    protected $permissionPresenter;
+    public function __construct(PermissionRepository $permissionRepository)
     {
-        return view('authorization::index');
+        $this->permissionRepository = $permissionRepository;
+        $this->permissionPresenter  = new PermissionPresenter();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('authorization::create');
-    }
+    function list(Request $request) {
+        $limit = $request->has('page_size') ? (int) $request->get('page_size') : 15;
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
+        $query = $this->permissionRepository;
+
+        $query = $this->applyConstraintsFromRequest($query, $request, ['name']);
+        $query = $this->applySearchFromRequest($query, ['name'], $request);
+        $query = $this->applyOrderByFromRequest($query, $request);
+
+        $companies = $query->paginate($limit);
+
+        return $this->permissionPresenter->present($companies);
     }
 
     /**
@@ -43,7 +40,9 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        return view('authorization::show');
+        $company = $this->permissionRepository->find($id);
+
+        return $this->permissionPresenter->present($company);
     }
 
     /**

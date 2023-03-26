@@ -27,7 +27,7 @@ class SeedPermissionTableSeeder extends Seeder
             [
                 'name'        => 'Create company',
                 'slug'        => 'create-company',
-                'description' => 'Create company" permission lets users create a company',
+                'description' => 'Create company permission lets users create a company',
                 'model'       => 'company',
             ],
             [

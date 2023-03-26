@@ -55,16 +55,6 @@ class CompanyController extends ApiController
     }
 
     /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('company::edit');
-    }
-
-    /**
      * Update the specified resource in storage.
      * @param Request $request
      * @param int $id

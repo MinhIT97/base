@@ -16,12 +16,16 @@ class PermissionTransformer extends TransformerAbstract
     public function transform($model)
     {
         return [
-            'id'         => (int) $model->id,
+            'id'          => (int) $model->id,
+            'name'        => $model->name,
+            'slug'        => $model->slug,
+            'description' => $model->description,
+            'model'       => $model->model,
 
             /* place your other model properties here */
 
-            'created_at' => $model->created_at,
-            'updated_at' => $model->updated_at
+            'created_at'  => $model->created_at,
+            'updated_at'  => $model->updated_at,
         ];
     }
 }

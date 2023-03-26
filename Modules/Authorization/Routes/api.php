@@ -11,6 +11,7 @@
 |
  */
 
+use Modules\Authorization\Http\Controllers\PermissionController;
 use Modules\Authorization\Http\Controllers\RoleController;
 
 $api = app('Dingo\Api\Routing\Router');
@@ -18,5 +19,11 @@ $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', function ($api) {
     $api->group(['prefix' => 'v1/roles', 'middleware' => 'api'], function ($api) {
         $api->get('/', [RoleController::class, 'store']);
+    });
+});
+$api->version('v1', function ($api) {
+    $api->group(['prefix' => 'v1/permissions', 'middleware' => 'api'], function ($api) {
+        $api->get('/', [PermissionController::class, 'list']);
+        $api->get('/{id}', [PermissionController::class, 'show']);
     });
 });
