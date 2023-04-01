@@ -17,10 +17,17 @@ class CreateRolesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('company_id');
             $table->string('description')->nullable();
             $table->integer('status')->default(0);
             $table->integer('level')->default(1);
             $table->timestamps();
+        });
+
+        Schema::table('roles', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 

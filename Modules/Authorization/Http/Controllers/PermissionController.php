@@ -28,9 +28,9 @@ class PermissionController extends ApiController
         $query = $this->applySearchFromRequest($query, ['name'], $request);
         $query = $this->applyOrderByFromRequest($query, $request);
 
-        $companies = $query->paginate($limit);
+        $permissions = $query->paginate($limit);
 
-        return $this->permissionPresenter->present($companies);
+        return $this->permissionPresenter->present($permissions);
     }
 
     /**
@@ -40,20 +40,11 @@ class PermissionController extends ApiController
      */
     public function show($id)
     {
-        $company = $this->permissionRepository->find($id);
+        $permission = $this->permissionRepository->find($id);
 
-        return $this->permissionPresenter->present($company);
+        return $this->permissionPresenter->present($permission);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('authorization::edit');
-    }
 
     /**
      * Update the specified resource in storage.

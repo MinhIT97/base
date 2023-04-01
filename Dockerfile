@@ -1,29 +1,29 @@
-FROM php:8.0-fpm
+FROM php:8.1 as php
 
-RUN apk update && apk add --no-cache \
-    build-base \
-    shadow \
-    openssl-dev \
-    icu-dev \
-    zlib-dev \
-    libzip-dev \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    libxml2-dev \
-    supervisor \
-    curl
+RUN apt-get update -y
+RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev
+RUN docker-php-ext-install pdo pdo_mysql bcmath
 
-RUN docker-php-ext-install opcache pdo_mysql mysqli zip gd exif pcntl intl bcmath soap
-RUN pecl install redis xdebug && docker-php-ext-enable redis xdebug
+RUN pecl install -o -f redis \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable redis
 
-WORKDIR /var/www/html
-
+WORKDIR /var/www
 COPY . .
 
-RUN cp .env.example .env && \
-    php artisan key:generate
+COPY --from=composer:2.3.5 /usr/bin/composer /usr/bin/composer
 
-CMD ["php-fpm"]
+ENV PORT=8000
+ENTRYPOINT [ "docker/entrypoint.sh" ]
 
-EXPOSE 8000
+# ==============================================================================
+#  node
+FROM node:14-alpine as node
+
+WORKDIR /var/www
+COPY . .
+
+RUN npm install --global cross-env
+RUN npm install
+
+VOLUME /var/www/node_modules

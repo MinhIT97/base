@@ -21,9 +21,6 @@ class PermissionTransformer extends TransformerAbstract
             'slug'        => $model->slug,
             'description' => $model->description,
             'model'       => $model->model,
-
-            /* place your other model properties here */
-
             'created_at'  => $model->created_at,
             'updated_at'  => $model->updated_at,
         ];

@@ -4,7 +4,7 @@ namespace Modules\Authorization\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Modules\Authorization\Entities\Role;
+use Modules\Authorization\Http\Requests\Role\StoreRoleRequest;
 use Modules\Authorization\Presenters\RolePresenter;
 use Modules\Authorization\Repositories\RoleRepository;
 use Modules\Core\Http\Controllers\ApiController;
@@ -25,18 +25,18 @@ class RoleController extends ApiController
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
-    {
-        return view('authorization::index');
-    }
+    function list(Request $request) {
+        $limit = $request->has('page_size') ? (int) $request->get('page_size') : 15;
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('authorization::create');
+        $query = $this->roleRepository;
+
+        $query = $this->applyConstraintsFromRequest($query, $request, ['name']);
+        $query = $this->applySearchFromRequest($query, ['name'], $request);
+        $query = $this->applyOrderByFromRequest($query, $request);
+
+        $roles = $query->paginate($limit);
+
+        return $this->rolePresenter->present($roles);
     }
 
     /**
@@ -44,16 +44,16 @@ class RoleController extends ApiController
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request)
+    public function store(StoreRoleRequest $request)
     {
-        $user = $this->getAuthenticatedUser();
-        $role = Role::query()->create([
-            'name'        => 'test 1',
-            'status'      => 1,
-            'description' => 1,
-            'level'       => 1,
-        ]);
-        return $role;
+        $data = $request->only('name', 'description', 'status');
+
+        $user               = $this->getAuthenticatedUser();
+        $data['user_id']    = $user->id;
+        $data['company_id'] = $user->company_id;
+        $role               = $this->roleRepository->create($data);
+
+        return $this->rolePresenter->present($role);
     }
 
     /**
@@ -63,7 +63,9 @@ class RoleController extends ApiController
      */
     public function show($id)
     {
-        return view('authorization::show');
+        $role = $this->roleRepository->find($id);
+
+        return $this->rolePresenter->present($role);
     }
 
     /**
@@ -94,6 +96,9 @@ class RoleController extends ApiController
      */
     public function destroy($id)
     {
-        //
+
+        $detele = $this->roleRepository->delete($id);
+
+        return $this->success();
     }
 }
