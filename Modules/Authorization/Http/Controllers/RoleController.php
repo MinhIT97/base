@@ -5,6 +5,7 @@ namespace Modules\Authorization\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Modules\Authorization\Http\Requests\Role\StoreRoleRequest;
+use Modules\Authorization\Http\Requests\Role\UpdateRoleRequest;
 use Modules\Authorization\Presenters\RolePresenter;
 use Modules\Authorization\Repositories\RoleRepository;
 use Modules\Core\Http\Controllers\ApiController;
@@ -30,7 +31,7 @@ class RoleController extends ApiController
 
         $query = $this->roleRepository;
 
-        $query = $this->applyConstraintsFromRequest($query, $request, ['name']);
+        $query = $this->applyConstraintsFromRequest($query, $request, ['name', 'status']);
         $query = $this->applySearchFromRequest($query, ['name'], $request);
         $query = $this->applyOrderByFromRequest($query, $request);
 
@@ -69,24 +70,21 @@ class RoleController extends ApiController
     }
 
     /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('authorization::edit');
-    }
-
-    /**
      * Update the specified resource in storage.
      * @param Request $request
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRoleRequest $request, $id)
     {
-        //
+
+        $user = $this->getAuthenticatedUser();
+
+        $data         = $request->only('name', 'description', 'status');
+        $data['slug'] = '';
+        $role         = $this->roleRepository->update($data, $id);
+
+        return $this->rolePresenter->present($role);
     }
 
     /**

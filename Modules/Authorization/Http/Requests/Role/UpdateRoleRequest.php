@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class StoreRoleRequest extends FormRequest
+class UpdateRoleRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -15,12 +15,14 @@ class StoreRoleRequest extends FormRequest
      */
     public function rules()
     {
+
         $user       = JWTAuth::parseToken()->authenticate();
         $company_id = $user->company_id;
+        $id         = request('id');
 
         return [
-            "name"        => ['required', Rule::unique('roles')->where(function ($query) use ($company_id) {
-                return $query->where('company_id', $company_id);
+            "name"        => ['required', Rule::unique('roles')->where(function ($query) use ($company_id, $id) {
+                return $query->where('company_id', $company_id)->where('id', '<>', $id);
             })],
             "description" => ['required', 'max:1500'],
             "status"      => ['nullable', 'in:0,1'],

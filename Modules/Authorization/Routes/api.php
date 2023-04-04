@@ -17,15 +17,16 @@ use Modules\Authorization\Http\Controllers\RoleController;
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
-    $api->group(['prefix' => 'v1/roles', 'middleware' => 'api'], function ($api) {
+    $api->group(['prefix' => 'v1/admin/roles', 'middleware' => 'api'], function ($api) {
         $api->get('/', [RoleController::class, 'list']);
         $api->post('/', [RoleController::class, 'store']);
         $api->get('/{id}', [RoleController::class, 'show']);
+        $api->put('/{id}', [RoleController::class, 'update']);
         $api->delete('/{id}', [RoleController::class, 'destroy']);
     });
 });
 $api->version('v1', function ($api) {
-    $api->group(['prefix' => 'v1/permissions', 'middleware' => 'api'], function ($api) {
+    $api->group(['prefix' => 'v1/admin/permissions', 'middleware' => 'api'], function ($api) {
         $api->get('/', [PermissionController::class, 'list']);
         $api->get('/{id}', [PermissionController::class, 'show']);
     });
