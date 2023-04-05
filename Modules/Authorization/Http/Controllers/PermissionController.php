@@ -45,7 +45,6 @@ class PermissionController extends ApiController
         return $this->permissionPresenter->present($permission);
     }
 
-
     /**
      * Update the specified resource in storage.
      * @param Request $request

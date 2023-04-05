@@ -30,7 +30,6 @@ class RoleController extends ApiController
         $limit = $request->has('page_size') ? (int) $request->get('page_size') : 15;
 
         $query = $this->roleRepository;
-
         $query = $this->applyConstraintsFromRequest($query, $request, ['name', 'status']);
         $query = $this->applySearchFromRequest($query, ['name'], $request);
         $query = $this->applyOrderByFromRequest($query, $request);
