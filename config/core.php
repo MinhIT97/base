@@ -8,5 +8,6 @@ return [
         'service'              => base_path() . '/modules/Core/Console/stubs/Service.stub',
         'trait'                => base_path() . '/modules/Core/Console/stubs/Trait.stub',
         'transformers'         => base_path() . '/modules/Core/Console/stubs/Transformer.stub',
+        'presenter'            => base_path() . '/modules/Core/Console/stubs/Presenter.stub',
     ],
 ];

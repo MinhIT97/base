@@ -10,4 +10,7 @@ use Prettus\Repository\Contracts\RepositoryInterface;
 interface RoleRepository extends RepositoryInterface
 {
     public function getEntity();
+    public function attachPermission($role, $permissionIds);
+    public function detachPermission($role, $permissionIds);
+    public function syncPermission($role, $permissionIds);
 }

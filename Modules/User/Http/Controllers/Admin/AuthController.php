@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use Modules\Core\Http\Controllers\ApiController;
 use Modules\User\Http\Requests\Admin\AdminLoginRequest;
 use Modules\User\Http\Requests\Admin\StoreUserRequest;
+use Modules\User\Presenters\UserPresenter;
 use Modules\User\Repositories\Admin\UserRepository;
 use Modules\User\Traits\User\AuthTrait;
-use Modules\User\Transformers\UserTransformer;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -19,11 +19,12 @@ class AuthController extends ApiController
     use AuthTrait;
     protected $userRepository;
     protected $transformer;
+    protected $userPresenter;
 
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->transformer    = UserTransformer::class;
+        $this->userPresenter  = new UserPresenter();
         $this->middleware('auth:api', ['except' => ['login']]);
     }
 
@@ -67,6 +68,12 @@ class AuthController extends ApiController
 
         $user = $this->userRepository->create($data);
 
-        return $this->response->item($user, new $this->transformer);
+        return $this->userPresenter->present($user);
+    }
+
+    public function me()
+    {
+        $user = $this->getAuthenticatedUser();
+        return $this->userPresenter->present($user);
     }
 }

@@ -32,5 +32,9 @@ class Role extends Model
     {
         return $this->belongsTo(Company::class);
     }
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class)->withTimestamps();
+    }
 
 }

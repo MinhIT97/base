@@ -20,7 +20,6 @@ $api->version('v1', function ($api) {
 });
 
 $api->version('v1', function ($api) {
-
     $api->group(['prefix' => 'users', 'middleware' => 'api'], function ($api) {
         $api->post('login', 'Modules\User\Http\Controllers\User\AuthController@login');
         $api->get('me', 'Modules\User\Http\Controllers\User\AuthController@me');
@@ -28,10 +27,14 @@ $api->version('v1', function ($api) {
 });
 
 //admin
-
 $api->version('v1', function ($api) {
-    $api->group(['prefix' => 'v1/admin', 'middleware' => 'api'], function ($api) {
-        $api->post('login', 'Modules\User\Http\Controllers\Admin\AuthController@login');
+    $api->group(['prefix' => 'v1/admin', 'middleware' => ['jwt', 'api']], function ($api) {
         $api->post('/users', 'Modules\User\Http\Controllers\Admin\AuthController@store');
+        $api->get('/me', 'Modules\User\Http\Controllers\Admin\AuthController@me');
+    });
+});
+$api->version('v1', function ($api) {
+    $api->group(['prefix' => 'v1/admin', 'middleware' => [ 'api']], function ($api) {
+        $api->post('login', 'Modules\User\Http\Controllers\Admin\AuthController@login');
     });
 });

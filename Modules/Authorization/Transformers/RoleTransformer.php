@@ -8,7 +8,7 @@ use Modules\User\Transformers\UserTransformer;
 
 class RoleTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['user', 'company'];
+    protected $availableIncludes = ['user', 'company','permissions'];
 
     public function __construct($includes = [])
     {
@@ -43,6 +43,13 @@ class RoleTransformer extends TransformerAbstract
         $company = $model->company;
         if ($company) {
             return $this->item($company, new CompanyTransformer());
+        }
+    }
+    public function includePermissions($model)
+    {
+        $permissions = $model->permissions;
+        if ($permissions) {
+            return $this->collection($permissions, new PermissionTransformer());
         }
     }
 

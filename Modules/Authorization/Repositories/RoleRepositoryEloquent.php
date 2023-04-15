@@ -27,6 +27,25 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
         return $this->model;
     }
 
+    public function attachPermission($role, $permissionIds)
+    {
+        $role->permissions()->attach($permissionIds);
+
+        return $role;
+    }
+    public function detachPermission($role, $permissionIds)
+    {
+        $role->permissions()->detach($permissionIds);
+
+        return $role;
+    }
+    public function syncPermission($role, $permissionIds)
+    {
+        $role->permissions()->sync($permissionIds);
+
+        return $role;
+    }
+
     /**
      * Boot up the repository, pushing criteria
      */

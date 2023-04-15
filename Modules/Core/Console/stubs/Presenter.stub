@@ -1,0 +1,23 @@
+<?php
+
+namespace $CLASS_NAMESPACE$;
+
+use Prettus\Repository\Presenter\FractalPresenter;
+
+/**
+ * Class CompanyPresenter.
+ *
+ * @package namespace App\Presenters;
+ */
+class {{name}}Presenter extends FractalPresenter
+{
+    /**
+     * Transformer
+     *
+     * @return \League\Fractal\TransformerAbstract
+     */
+    public function getTransformer()
+    {
+        return new PermissionTransformer();
+    }
+}

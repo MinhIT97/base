@@ -13,6 +13,7 @@
 
 use Modules\Authorization\Http\Controllers\PermissionController;
 use Modules\Authorization\Http\Controllers\RoleController;
+use Modules\Authorization\Http\Controllers\RoleRelationShipController;
 
 $api = app('Dingo\Api\Routing\Router');
 
@@ -23,6 +24,9 @@ $api->version('v1', function ($api) {
         $api->get('/{id}', [RoleController::class, 'show']);
         $api->put('/{id}', [RoleController::class, 'update']);
         $api->delete('/{id}', [RoleController::class, 'destroy']);
+        $api->post('/{id}/permissions/attach', [RoleRelationShipController::class, 'attachPermission']);
+        $api->post('/{id}/permissions/detach', [RoleRelationShipController::class, 'detachPermission']);
+        $api->post('/{id}/permissions/sync', [RoleRelationShipController::class, 'syncPermission']);
     });
 });
 $api->version('v1', function ($api) {

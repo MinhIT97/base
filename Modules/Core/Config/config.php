@@ -7,5 +7,6 @@ return [
         'repository_eloquent'  => base_path() . '/Modules/Core/Console/stubs/RepositoryEloquent.stub',
         'service'              => base_path() . '/modules/Core/Console/stubs/Service.stub',
         'trait'                => base_path() . '/modules/Core/Console/stubs/Trait.stub',
+        'presenter'            => base_path() . '/modules/Core/Console/stubs/Presenter.stub',
     ],
 ];
