@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Company\Http\Requests;
+namespace Modules\Authorization\Http\Requests\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCompanyRequest extends FormRequest
+class DetachPermissionRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,9 +14,8 @@ class StoreCompanyRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'         => ['required', 'unique:companies,name'],
-            'email'        => ['required', 'unique:companies,email'],
-            'phone_number' => ['required', 'unique:companies,phone_number'],
+            'permission_ids'   => ['required', 'array', 'exists:permissions,id'],
+            'permission_ids.*' => ['numeric'],
         ];
     }
 

@@ -12,26 +12,30 @@
  */
 
 use Modules\Authorization\Http\Controllers\PermissionController;
+use Modules\Authorization\Http\Controllers\PermissionRelationShipController;
 use Modules\Authorization\Http\Controllers\RoleController;
 use Modules\Authorization\Http\Controllers\RoleRelationShipController;
 
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
-    $api->group(['prefix' => 'v1/admin/roles', 'middleware' => 'api'], function ($api) {
+    $api->group(['prefix' => 'v1/admin/roles', 'middleware' => ['jwt', 'api']], function ($api) {
         $api->get('/', [RoleController::class, 'list']);
         $api->post('/', [RoleController::class, 'store']);
         $api->get('/{id}', [RoleController::class, 'show']);
         $api->put('/{id}', [RoleController::class, 'update']);
         $api->delete('/{id}', [RoleController::class, 'destroy']);
-        $api->post('/{id}/permissions/attach', [RoleRelationShipController::class, 'attachPermission']);
-        $api->post('/{id}/permissions/detach', [RoleRelationShipController::class, 'detachPermission']);
-        $api->post('/{id}/permissions/sync', [RoleRelationShipController::class, 'syncPermission']);
+        $api->post('/{id}/permissions/attach', [RoleRelationShipController::class, 'attachPermissions']);
+        $api->post('/{id}/permissions/detach', [RoleRelationShipController::class, 'detachPermissions']);
+        $api->post('/{id}/permissions/sync', [RoleRelationShipController::class, 'syncPermissions']);
     });
 });
 $api->version('v1', function ($api) {
-    $api->group(['prefix' => 'v1/admin/permissions', 'middleware' => 'api'], function ($api) {
+    $api->group(['prefix' => 'v1/admin/permissions', 'middleware' => ['jwt', 'api']], function ($api) {
         $api->get('/', [PermissionController::class, 'list']);
         $api->get('/{id}', [PermissionController::class, 'show']);
+        $api->post('/{id}/roles/attach', [PermissionRelationShipController::class, 'attachRole']);
+        $api->post('/{id}/roles/detach', [PermissionRelationShipController::class, 'detachRole']);
+        $api->post('/{id}/roles/sync', [PermissionRelationShipController::class, 'syncRole']);
     });
 });

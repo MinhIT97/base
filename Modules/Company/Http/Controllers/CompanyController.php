@@ -26,10 +26,11 @@ class CompanyController extends ApiController
 
     public function index(Request $request)
     {
+        $this->authorize('companyList', $this->entity);
+
         $limit = $request->has('page_size') ? (int) $request->get('page_size') : 15;
 
         $query = $this->companyRepository;
-
         $query = $this->applyConstraintsFromRequest($query, $request, ['name', 'phone_number', 'email']);
         $query = $this->applySearchFromRequest($query, ['name'], $request);
         $query = $this->applyOrderByFromRequest($query, $request);
@@ -41,6 +42,8 @@ class CompanyController extends ApiController
 
     public function store(StoreCompanyRequest $request)
     {
+        $this->authorize('store', $this->entity);
+
         $data    = $request->all();
         $company = $this->companyRepository->create($data);
 
@@ -50,6 +53,8 @@ class CompanyController extends ApiController
     public function show($id)
     {
         $company = $this->companyRepository->find($id);
+
+        $this->authorize('show', $company);
 
         return $this->companyPresenter->present($company);
     }
@@ -65,6 +70,8 @@ class CompanyController extends ApiController
         $data = $request->all();
 
         $company = $this->companyRepository->find($id);
+        $this->authorize('update', $company);
+
         $company->update($data);
 
         return $this->companyPresenter->present($company);
@@ -78,6 +85,7 @@ class CompanyController extends ApiController
     public function destroy($id)
     {
         $company = $this->companyRepository->delete($id);
+        $this->authorize('destroy', $company);
         return $this->success();
     }
 }

@@ -16,7 +16,7 @@ $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
 
-    $api->group(['prefix' => 'v1/companies', 'middleware' => 'api'], function ($api) {
+    $api->group(['prefix' => 'v1/companies', 'middleware' => ['jwt', 'api']], function ($api) {
         $api->post('/', [CompanyController::class, 'store']);
         $api->get('/', [CompanyController::class, 'index']);
         $api->get('/{id}', [CompanyController::class, 'show']);

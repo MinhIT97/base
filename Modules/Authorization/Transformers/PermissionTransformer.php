@@ -6,7 +6,7 @@ use League\Fractal\TransformerAbstract;
 
 class PermissionTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = [];
+    protected $availableIncludes = ['roles'];
 
     public function __construct($includes = [])
     {
@@ -24,5 +24,13 @@ class PermissionTransformer extends TransformerAbstract
             'created_at'  => $model->created_at,
             'updated_at'  => $model->updated_at,
         ];
+    }
+
+    public function includeRoles($model)
+    {
+        $roles = $model->roles;
+        if ($roles) {
+            return $this->collection($roles, new RoleTransformer());
+        }
     }
 }

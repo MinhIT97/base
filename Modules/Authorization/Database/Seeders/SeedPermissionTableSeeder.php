@@ -21,6 +21,7 @@ class SeedPermissionTableSeeder extends Seeder
 
         $this->createPermissionCompany();
         $this->createPermissionRole();
+        $this->createPermissionPermissionRelationShip();
     }
 
     protected function createPermissionCompany()
@@ -91,6 +92,17 @@ class SeedPermissionTableSeeder extends Seeder
                 'slug'        => 'show-list-role',
                 'description' => 'Show list role permission grants access to the list of role in the system',
                 'model'       => Role::class,
+            ],
+        ], ['name']);
+    }
+    protected function createPermissionPermissionRelationShip()
+    {
+        Permission::query()->upsert([
+            [
+                'name'        => 'Assign permissions',
+                'slug'        => 'assign-permissions',
+                'description' => 'Assign permissions is a permission that allows users to set access permissions for roles in the system, providing flexibility and efficiency in managing access rights.',
+                'model'       => Company::class,
             ],
         ], ['name']);
     }

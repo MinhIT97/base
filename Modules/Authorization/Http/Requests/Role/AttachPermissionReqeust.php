@@ -14,7 +14,7 @@ class AttachPermissionReqeust extends FormRequest
     public function rules()
     {
         return [
-            'permission_ids'   => ['required', 'array'],
+            'permission_ids'   => ['required', 'array', 'exists:permissions,id'],
             'permission_ids.*' => ['numeric'],
         ];
     }

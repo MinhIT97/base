@@ -20,7 +20,7 @@ class RoleRelationShipController extends ApiController
         $this->rolePresenter  = new RolePresenter();
     }
 
-    public function attachPermission(AttachPermissionReqeust $request, $id)
+    public function attachPermissions(AttachPermissionReqeust $request, $id)
     {
         $user = $this->user;
 
@@ -28,12 +28,12 @@ class RoleRelationShipController extends ApiController
 
         $permissionIds = $request->permission_ids;
 
-        $attach = $this->roleRepository->attachPermission($role, $permissionIds);
+        $attach = $this->roleRepository->attachPermissions($role, $permissionIds);
 
         return $this->rolePresenter->present($attach);
     }
 
-    public function detachPermission(AttachPermissionReqeust $request, $id)
+    public function detachPermissions(AttachPermissionReqeust $request, $id)
     {
         $user = $this->user;
 
@@ -41,12 +41,12 @@ class RoleRelationShipController extends ApiController
 
         $permissionIds = $request->permission_ids;
 
-        $attach = $this->roleRepository->detachPermission($role, $permissionIds);
+        $attach = $this->roleRepository->detachPermissions($role, $permissionIds);
 
         return $this->rolePresenter->present($attach);
     }
 
-    public function syncPermission(AttachPermissionReqeust $request, $id)
+    public function syncPermissions(AttachPermissionReqeust $request, $id)
     {
         $user = $this->user;
 
@@ -54,7 +54,7 @@ class RoleRelationShipController extends ApiController
 
         $permissionIds = $request->permission_ids;
 
-        $attach = $this->roleRepository->syncPermission($role, $permissionIds);
+        $attach = $this->roleRepository->syncPermissions($role, $permissionIds);
 
         return $this->rolePresenter->present($attach);
     }

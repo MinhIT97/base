@@ -3,6 +3,8 @@
 namespace Modules\Core\Http\Controllers;
 
 use Dingo\Api\Routing\Helpers;
+use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -13,7 +15,8 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ApiController extends Controller
 {
-    use Helpers;
+    use Helpers, HandlesAuthorization, AuthorizesRequests;
+
     protected $upload_directory = 'uploads';
 
     public function success()
