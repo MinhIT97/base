@@ -3,16 +3,16 @@
 namespace Modules\User\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
+use Modules\User\Traits\User\UserHasRelationTrait;
 use Prettus\Repository\Traits\TransformableTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, TransformableTrait;
+    use HasFactory, TransformableTrait, UserHasRelationTrait;
 
     protected $fillable = [
         'email',

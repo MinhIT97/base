@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Authorization\Http\Controllers;
+namespace Modules\Authorization\Http\Controllers\Admin;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -15,10 +15,12 @@ class RoleController extends ApiController
 
     protected $roleRepository;
     protected $rolePresenter;
+    protected $entity;
     public function __construct(RoleRepository $roleRepository)
     {
         $this->roleRepository = $roleRepository;
         $this->rolePresenter  = new RolePresenter();
+        $this->entity         = $roleRepository->getEntity();
 
     }
 
@@ -27,6 +29,9 @@ class RoleController extends ApiController
      * @return Renderable
      */
     function list(Request $request) {
+
+        $this->authorize('roleList', $this->entity);
+
         $limit = $request->has('page_size') ? (int) $request->get('page_size') : 15;
 
         $query = $this->roleRepository;
@@ -46,6 +51,8 @@ class RoleController extends ApiController
      */
     public function store(StoreRoleRequest $request)
     {
+
+        $this->authorize('store', $this->entity);
         $data = $request->only('name', 'description', 'status');
 
         $user               = $this->getAuthenticatedUser();
@@ -64,6 +71,7 @@ class RoleController extends ApiController
     public function show($id)
     {
         $role = $this->roleRepository->find($id);
+        $this->authorize('show', $role);
 
         return $this->rolePresenter->present($role);
     }
@@ -76,12 +84,13 @@ class RoleController extends ApiController
      */
     public function update(UpdateRoleRequest $request, $id)
     {
-
-        $user = $this->getAuthenticatedUser();
-
+        $user         = $this->getAuthenticatedUser();
         $data         = $request->only('name', 'description', 'status');
         $data['slug'] = '';
-        $role         = $this->roleRepository->update($data, $id);
+
+        $role = $this->roleRepository->find($id);
+        $this->authorize('update', $role);
+        $role = $role->update($data);
 
         return $this->rolePresenter->present($role);
     }
@@ -93,9 +102,9 @@ class RoleController extends ApiController
      */
     public function destroy($id)
     {
-
+        $role = $this->roleRepository->find($id);
+        $this->authorize('update', $role);
         $detele = $this->roleRepository->delete($id);
-
         return $this->success();
     }
 }

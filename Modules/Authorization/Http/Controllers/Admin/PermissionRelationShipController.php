@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Authorization\Http\Controllers;
+namespace Modules\Authorization\Http\Controllers\Admin;
 
 use Modules\Authorization\Http\Requests\Permission\AttachRoleRequest;
 use Modules\Authorization\Http\Requests\Permission\DetachRoleRequest;
@@ -15,16 +15,18 @@ class PermissionRelationShipController extends ApiController
     protected $user;
     protected $permissionRepository;
     protected $permissionPresenter;
+    protected $entity;
     public function __construct(PermissionRepository $permissionRepository)
     {
         $this->permissionRepository = $permissionRepository;
         $this->user                 = $this->getAuthenticatedUser();
         $this->permissionPresenter  = new PermissionPresenter();
+        $this->entity               = $permissionRepository->getEntity();
     }
 
     public function attachRole(AttachRoleRequest $request, $id)
     {
-        $user = $this->user;
+        $this->authorize('assign', $this->entity);
 
         $permission = $this->permissionRepository->find($id);
 
@@ -37,7 +39,7 @@ class PermissionRelationShipController extends ApiController
 
     public function detachRole(DetachRoleRequest $request, $id)
     {
-        $user = $this->user;
+        $this->authorize('assign', $this->entity);
 
         $permission = $this->permissionRepository->find($id);
 
@@ -50,7 +52,7 @@ class PermissionRelationShipController extends ApiController
 
     public function syncRole(SyncRoleRequest $request, $id)
     {
-        $user = $this->user;
+        $this->authorize('assign', $this->entity);
 
         $permission = $this->permissionRepository->find($id);
 

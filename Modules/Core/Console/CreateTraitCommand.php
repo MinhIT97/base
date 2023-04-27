@@ -89,15 +89,17 @@ class CreateTraitCommand extends Command
 
         $arrayClassName = explode('/', $class_name);
 
-        $traitFemplate = str_replace('{{name}}', $class_name, $stub);
+
 
         if (count($arrayClassName) > 1) {
             $arrayClassName   = collect($arrayClassName);
             $class_name       = $arrayClassName->pop();
+            $traitFemplate = str_replace('{{name}}', $class_name, $stub);
             $endNameFolder    = implode('/', $arrayClassName->all());
             $traitFolder_path = $traitFolder_path . '/' . $endNameFolder;
             $traitFemplate    = str_replace('$CLASS_NAMESPACE$', $nameSpace . '\\' . $endNameFolder, $traitFemplate);
         } else {
+            $traitFemplate = str_replace('{{name}}', $class_name, $stub);
             $traitFemplate = str_replace('$CLASS_NAMESPACE$', $nameSpace, $traitFemplate);
         }
 

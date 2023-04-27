@@ -38,6 +38,7 @@ class AuthorizationServiceProvider extends ServiceProvider
     {
         $this->app->register(RouteServiceProvider::class);
         $this->app->register(RepositoryServiceProvider::class);
+        $this->app->register(PolicyProvider::class);
     }
 
     /**

@@ -1,16 +1,14 @@
 <?php
 
-namespace Modules\Company\Policies;
+namespace Modules\Authorization\Policies\Role;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Modules\Core\Policies\BasePolicy;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class CompanyPolicy extends BasePolicy
+class RolePolicy extends BasePolicy
 {
     use HandlesAuthorization;
-
     protected $user;
 
     /**
@@ -23,30 +21,35 @@ class CompanyPolicy extends BasePolicy
         $this->user = JWTAuth::parseToken()->authenticate();
     }
 
-    public function companyList()
+    public function roleList()
     {
         $user = $this->user;
-
-        return $user->hasPermission('show-list-company');
+        return $user->hasPermission('show-list-role');
     }
     public function store()
     {
         $user = $this->user;
-        return $user->hasPermission('create-company');
+        return $user->hasPermission('create-role');
     }
     public function show($user, $company)
     {
-        return $user->hasPermission('show-company');
+        return $user->hasPermission('show-role');
         return true;
     }
     public function update($user, $company)
     {
-        return $user->hasPermission('update-company');
+        return $user->hasPermission('update-role');
         return true;
     }
     public function destroy($user, $company)
     {
-        return $user->hasPermission('delete--company');
+        return $user->hasPermission('delete-role');
         return true;
+    }
+
+    public function assign()
+    {
+        $user = $this->user;
+        return $user->hasPermission('assign-permissions');
     }
 }

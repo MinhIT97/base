@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Authorization\Http\Controllers;
+namespace Modules\Authorization\Http\Controllers\Admin;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -13,13 +13,18 @@ class PermissionController extends ApiController
 
     protected $permissionRepository;
     protected $permissionPresenter;
+    protected $entity;
     public function __construct(PermissionRepository $permissionRepository)
     {
         $this->permissionRepository = $permissionRepository;
         $this->permissionPresenter  = new PermissionPresenter();
+        $this->entity               = $permissionRepository->getEntity();
     }
 
     function list(Request $request) {
+
+        $this->authorize('permissionList', $this->entity);
+
         $limit = $request->has('page_size') ? (int) $request->get('page_size') : 15;
 
         $query = $this->permissionRepository;
@@ -41,28 +46,7 @@ class PermissionController extends ApiController
     public function show($id)
     {
         $permission = $this->permissionRepository->find($id);
-
+        $this->authorize('show', $permission);
         return $this->permissionPresenter->present($permission);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

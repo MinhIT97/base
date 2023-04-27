@@ -10,4 +10,7 @@ use Prettus\Repository\Contracts\RepositoryInterface;
 interface UserRepository extends RepositoryInterface
 {
     public function verifyEmail($user);
+    public function attachRoles($role, $roleIds);
+    public function detachRoles($role, $roleIds);
+    public function syncRoles($role, $roleIds);
 }

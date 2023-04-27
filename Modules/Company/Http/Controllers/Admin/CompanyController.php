@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Company\Http\Controllers;
+namespace Modules\Company\Http\Controllers\Admin;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -27,9 +27,7 @@ class CompanyController extends ApiController
     public function index(Request $request)
     {
         $this->authorize('companyList', $this->entity);
-
         $limit = $request->has('page_size') ? (int) $request->get('page_size') : 15;
-
         $query = $this->companyRepository;
         $query = $this->applyConstraintsFromRequest($query, $request, ['name', 'phone_number', 'email']);
         $query = $this->applySearchFromRequest($query, ['name'], $request);
@@ -55,7 +53,6 @@ class CompanyController extends ApiController
         $company = $this->companyRepository->find($id);
 
         $this->authorize('show', $company);
-
         return $this->companyPresenter->present($company);
     }
 
@@ -73,7 +70,6 @@ class CompanyController extends ApiController
         $this->authorize('update', $company);
 
         $company->update($data);
-
         return $this->companyPresenter->present($company);
     }
 
@@ -84,8 +80,10 @@ class CompanyController extends ApiController
      */
     public function destroy($id)
     {
-        $company = $this->companyRepository->delete($id);
+        $company = $this->companyRepository->find($id);
         $this->authorize('destroy', $company);
+
+        $company = $this->companyRepository->delete($id);
         return $this->success();
     }
 }

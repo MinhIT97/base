@@ -1,7 +1,5 @@
 <?php
 
-use Modules\Company\Http\Controllers\CompanyController;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -12,6 +10,9 @@ use Modules\Company\Http\Controllers\CompanyController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
  */
+
+use Modules\Company\Http\Controllers\Admin\CompanyController;
+
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {

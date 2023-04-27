@@ -11,10 +11,10 @@
 |
  */
 
-use Modules\Authorization\Http\Controllers\PermissionController;
-use Modules\Authorization\Http\Controllers\PermissionRelationShipController;
-use Modules\Authorization\Http\Controllers\RoleController;
-use Modules\Authorization\Http\Controllers\RoleRelationShipController;
+use Modules\Authorization\Http\Controllers\Admin\PermissionController;
+use Modules\Authorization\Http\Controllers\Admin\PermissionRelationShipController;
+use Modules\Authorization\Http\Controllers\Admin\RoleController;
+use Modules\Authorization\Http\Controllers\Admin\RoleRelationShipController;
 
 $api = app('Dingo\Api\Routing\Router');
 

@@ -28,6 +28,25 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
         return $this->model;
     }
 
+    public function attachRoles($user, $roleIds)
+    {
+        $roleIds = array_unique(array_diff($roleIds, $user->roles->pluck('id')->all()));
+        $user->roles()->attach($roleIds);
+        return $user;
+    }
+    public function detachRoles($user, $roleIds)
+    {
+        $user->roles()->detach($roleIds);
+
+        return $user;
+    }
+    public function syncRoles($user, $roleIds)
+    {
+        $user->roles()->sync($roleIds);
+
+        return $user;
+    }
+
     /**
      * Boot up the repository, pushing criteria
      */

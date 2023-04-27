@@ -3,10 +3,11 @@
 namespace Modules\User\Transformers;
 
 use League\Fractal\TransformerAbstract;
+use Modules\Authorization\Transformers\RoleTransformer;
 
 class UserTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = [];
+    protected $availableIncludes = ['roles'];
 
     public function __construct($includes = [])
     {
@@ -35,5 +36,14 @@ class UserTransformer extends TransformerAbstract
             'created_at'        => $model->created_at,
             'updated_at'        => $model->updated_at,
         ];
+    }
+
+
+    public function includeRoles($model)
+    {
+        $roles = $model->roles;
+        if ($roles) {
+            return $this->collection($roles, new RoleTransformer());
+        }
     }
 }
