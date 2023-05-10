@@ -11,8 +11,6 @@
 |
 */
 
-use Illuminate\Support\Facades\Route;
-
-Route::prefix('authorization')->group(function() {
-    Route::get('/', 'AuthorizationController@index');
+Route::prefix('ecommerce')->group(function() {
+    Route::get('/', 'EcommerceController@index');
 });

@@ -13,6 +13,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('authorization')->group(function() {
-    Route::get('/', 'AuthorizationController@index');
+Route::prefix('candidate')->group(function() {
+    Route::get('/', 'CandidateController@index');
 });

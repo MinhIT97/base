@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::prefix('company')->group(function() {
     Route::get('/', 'CompanyController@index');
 });

@@ -2,5 +2,7 @@
     "User": true,
     "Core": true,
     "Company": true,
-    "Authorization": true
+    "Authorization": true,
+    "Candidate": true,
+    "Ecommerce": true
 }
