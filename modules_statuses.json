@@ -4,5 +4,9 @@
     "Company": true,
     "Authorization": true,
     "Candidate": true,
-    "Ecommerce": true
+    "Ecommerce": true,
+    "Product": true,
+    "Post": true,
+    "Category": true,
+    "Tag": true
 }
