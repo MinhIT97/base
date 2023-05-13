@@ -68,7 +68,7 @@ class CreatePresenterCommand extends Command
 
         $nameSpace = $this->getClassNamespace($module) . '\Presenters';
 
-        $class_name = $this->getPresenterName();
+        $className = $this->getPresenterName();
 
         $file_system  = app(Filesystem::class);
         $package_path = base_path() . '/' . $this->laravel['modules']->config('namespace') . '/' . $packageName;
@@ -81,16 +81,24 @@ class CreatePresenterCommand extends Command
 
         $transfomerFolderPath = $transfomerFolderPath;
 
-        $arrayClassName = explode('/', $class_name);
+        $arrayClassName = explode('/', $className);
 
-        $traitFemplate = str_replace('{{name}}', $class_name, $stub);
+
 
         if (count($arrayClassName) > 1) {
             $arrayClassName       = collect($arrayClassName);
-            $class_name           = $arrayClassName->pop();
+            $className           = $arrayClassName->pop();
             $endNameFolder        = implode('/', $arrayClassName->all());
             $transfomerFolderPath = $transfomerFolderPath . '/' . $endNameFolder;
+
+            $traitFemplate = str_replace('{{name}}', $className, $stub);
+
+            $nameSpace .= '\\' . str_replace('/', '\\' , $endNameFolder);
+
+            $traitFemplate    = str_replace('$CLASS_NAMESPACE$', $nameSpace , $traitFemplate);
+
         } else {
+            $traitFemplate = str_replace('{{name}}', $className, $stub);
             $traitFemplate = str_replace('$CLASS_NAMESPACE$', $nameSpace, $traitFemplate);
         }
 
@@ -98,7 +106,7 @@ class CreatePresenterCommand extends Command
             $file_system->makeDirectory($transfomerFolderPath, 0755, true);
         }
 
-        $file_path = $transfomerFolderPath . '/' . $class_name . 'Presenter.php';
+        $file_path = $transfomerFolderPath . '/' . $className . 'Presenter.php';
 
         if ($file_system->isFile($file_path)) {
             throw new Exception('Trait already existed');

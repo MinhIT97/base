@@ -46,7 +46,7 @@ class CompanyPolicy extends BasePolicy
     }
     public function destroy($user, $company)
     {
-        return $user->hasPermission('delete--company');
+        return $user->hasPermission('delete-company');
         return true;
     }
 }

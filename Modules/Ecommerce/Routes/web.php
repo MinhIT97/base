@@ -11,6 +11,8 @@
 |
 */
 
-Route::prefix('ecommerce')->group(function() {
+use Illuminate\Support\Facades\Route;
+
+Route::prefix('')->group(function() {
     Route::get('/', 'EcommerceController@index');
 });

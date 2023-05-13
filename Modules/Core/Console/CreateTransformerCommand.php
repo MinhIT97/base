@@ -88,15 +88,20 @@ class CreateTransformerCommand extends Command
 
         $arrayClassName = explode('/', $class_name);
 
-        $traitFemplate = str_replace('{{name}}', $class_name, $stub);
 
         if (count($arrayClassName) > 1) {
             $arrayClassName       = collect($arrayClassName);
             $class_name           = $arrayClassName->pop();
             $endNameFolder        = implode('/', $arrayClassName->all());
             $transfomerFolderPath = $transfomerFolderPath . '/' . $endNameFolder;
+            $traitFemplate = str_replace('{{name}}', $class_name, $stub);
+
+            $nameSpace .= '\\' . str_replace('/', '\\' , $endNameFolder);
+
+            $traitFemplate = str_replace('$CLASS_NAMESPACE$', $nameSpace, $traitFemplate);
 
         } else {
+            $traitFemplate = str_replace('{{name}}', $class_name, $stub);
             $traitFemplate = str_replace('$CLASS_NAMESPACE$', $nameSpace, $traitFemplate);
         }
 

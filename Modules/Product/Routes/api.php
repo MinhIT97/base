@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use Modules\Product\Http\Controllers\Admin\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,8 +11,16 @@ use Illuminate\Http\Request;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
-Route::middleware('auth:api')->get('/product', function (Request $request) {
-    return $request->user();
+$api = app('Dingo\Api\Routing\Router');
+
+$api->version('v1', function ($api) {
+    $api->group(['prefix' => 'v1/admin/products', 'middleware' => ['jwt', 'api']], function ($api) {
+        $api->post('/', [ProductController::class, 'store']);
+        $api->get('/', [ProductController::class, 'index']);
+        $api->get('/{id}', [ProductController::class, 'show']);
+        $api->put('/{id}', [ProductController::class, 'update']);
+        $api->delete('/{id}', [ProductController::class, 'destroy']);
+    });
 });

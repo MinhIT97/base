@@ -47,14 +47,14 @@ class CreateRepositoryCommand extends Command
     public function handle()
     {
 
-        $repository_names = $this->argument('repository');
+        $repositoryNames = $this->argument('repository');
 
         $interface_stub = $this->getInterfaceStub();
         $eloquent_stub  = $this->getEloquentStub();
 
         try {
-            $this->makeRepository($this->getModuleName(), $repository_names, $interface_stub);
-            $this->makeRepository($this->getModuleName(), $repository_names, $eloquent_stub, true);
+            $this->makeRepository($this->getModuleName(), $repositoryNames, $interface_stub);
+            $this->makeRepository($this->getModuleName(), $repositoryNames, $eloquent_stub, true);
         } catch (Exception $e) {
             $this->error($e->getMessage());
             return 1;
@@ -116,51 +116,61 @@ class CreateRepositoryCommand extends Command
      *
      * @return void
      */
-    protected function makeRepository($package_name, $repository_names, $stub, $eloquent = false)
+    protected function makeRepository($packageName, $repositoryNames, $stub, $eloquent = false)
     {
 
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
 
-        $name_space = $this->getClassNamespace($module) . '\Repositories';
+        $nameSpace = $this->getClassNamespace($module) . '\Repositories';
 
-        $names      = $repository_names;
-        $class_name = $this->getRepositoryName();
+        $names      = $repositoryNames;
+        $className = $this->getRepositoryName();
 
-        $file_system  = app(Filesystem::class);
-        $package_path = base_path() . '/' . $this->laravel['modules']->config('namespace') . '/' . $package_name;
+        $fileSystem  = app(Filesystem::class);
+        $package_path = base_path() . '/' . $this->laravel['modules']->config('namespace') . '/' . $packageName;
 
-        $repository_folder_path = $package_path . '/Repositories';
+        $repositoryFolderPath = $package_path . '/Repositories';
 
-        if (!$file_system->isDirectory($package_path)) {
+        if (!$fileSystem->isDirectory($package_path)) {
             throw new Exception('Package does not exist');
         }
 
-        $repository_folder_path = $repository_folder_path;
+        $repositoryFolderPath = $repositoryFolderPath;
 
-        $arrayClassName = explode('/', $class_name);
+        $arrayClassName = explode('/', $className);
 
-        $repository_template = str_replace('{{name}}', $class_name, $stub);
+
         if (count($arrayClassName) > 1) {
             $arrayClassName         = collect($arrayClassName);
-            $class_name             = $arrayClassName->pop();
+            $className             = $arrayClassName->pop();
             $endNameFolder          = implode('/', $arrayClassName->all());
-            $repository_folder_path = $repository_folder_path . '/' . $endNameFolder;
-            $repository_template    = str_replace('$CLASS_NAMESPACE$', $name_space . '\\' . $endNameFolder, $repository_template);
+            $repositoryFolderPath = $repositoryFolderPath . '/' . $endNameFolder;
+
+            $repositoryTemplate = str_replace('{{name}}', $className, $stub);
+
+            $nameSpace .= '\\' . str_replace('/', '\\' , $endNameFolder);
+
+            $repositoryTemplate    = str_replace('$CLASS_NAMESPACE$', $nameSpace , $repositoryTemplate);
+
+
         } else {
-            $repository_template = str_replace('$CLASS_NAMESPACE$', $name_space, $repository_template);
+            $repositoryTemplate = str_replace('{{name}}', $className, $stub);
+            $repositoryTemplate = str_replace('$CLASS_NAMESPACE$', $nameSpace, $repositoryTemplate);
+
+
         }
 
-        if (!$file_system->isDirectory($repository_folder_path)) {
-            $file_system->makeDirectory($repository_folder_path, 0755, true);
+        if (!$fileSystem->isDirectory($repositoryFolderPath)) {
+            $fileSystem->makeDirectory($repositoryFolderPath, 0755, true);
         }
 
-        $file_path = $eloquent ? $repository_folder_path . '/' . $class_name . 'RepositoryEloquent.php' : $repository_folder_path . '/' . $class_name . 'Repository.php';
+        $file_path = $eloquent ? $repositoryFolderPath . '/' . $className . 'RepositoryEloquent.php' : $repositoryFolderPath . '/' . $className . 'Repository.php';
 
-        if ($file_system->isFile($file_path)) {
+        if ($fileSystem->isFile($file_path)) {
             throw new Exception('Repository already existed');
         }
 
-        $file_system->put($file_path, $repository_template);
+        $fileSystem->put($file_path, $repositoryTemplate);
     }
 
     public function getClassNamespace($module)

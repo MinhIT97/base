@@ -21,7 +21,6 @@ class CompanyController extends ApiController
         $this->companyRepository = $companyRepository;
         $this->entity            = $companyRepository->getEntity();
         $this->companyPresenter  = new CompanyPresenter();
-
     }
 
     public function index(Request $request)

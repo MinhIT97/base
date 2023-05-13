@@ -18,6 +18,6 @@ class {{name}}Presenter extends FractalPresenter
      */
     public function getTransformer()
     {
-        return new PermissionTransformer();
+        return new {{name}}Transformer();
     }
 }

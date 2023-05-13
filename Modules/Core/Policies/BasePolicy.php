@@ -18,11 +18,11 @@ class BasePolicy
         //
     }
 
-    // public function before($user)
-    // {
-    //     // if (!config('app.permissions_enabled', false)) {
-    //     //     return false;
-    //     // }
-    //     return true;
-    // }
+    public function before($user)
+    {
+        // if (!config('app.permissions_enabled', false)) {
+        //     return false;
+        // }
+        return true;
+    }
 }
