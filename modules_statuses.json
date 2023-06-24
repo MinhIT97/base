@@ -8,5 +8,6 @@
     "Product": true,
     "Post": true,
     "Category": true,
-    "Tag": true
+    "Tag": true,
+    "Menu": true
 }

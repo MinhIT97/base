@@ -1,15 +1,6 @@
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
-
-/***/ "./Resources/assets/js/app.js":
-/*!************************************!*\
-  !*** ./Resources/assets/js/app.js ***!
-  \************************************/
-/***/ (() => {
-
-$(document).ready(function () {});
-
-/***/ }),
 
 /***/ "./Resources/assets/sass/app.scss":
 /*!****************************************!*\
@@ -17,7 +8,6 @@ $(document).ready(function () {});
   \****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
@@ -110,8 +100,8 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"/public/js/ecommerce": 0,
-/******/ 			"public/css/ecommerce": 0
+/******/ 			"/js/ecommerce": 0,
+/******/ 			"css/ecommerce": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -161,8 +151,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["public/css/ecommerce"], () => (__webpack_require__("./Resources/assets/js/app.js")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["public/css/ecommerce"], () => (__webpack_require__("./Resources/assets/sass/app.scss")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/ecommerce"], () => (__webpack_require__("./Resources/assets/sass/app.scss")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
