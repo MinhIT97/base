@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -11,8 +9,22 @@ use Illuminate\Http\Request;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
-Route::middleware('auth:api')->get('/menu', function (Request $request) {
-    return $request->user();
+use Modules\Menu\Http\Controllers\Admin\MenuController;
+use Modules\Menu\Http\Controllers\Admin\MenuTypeController;
+
+$api = app('Dingo\Api\Routing\Router');
+
+$api->version('v1', function ($api) {
+    $api->group(['prefix' => 'v1/admin/menu-types', 'middleware' => ['jwt', 'api']], function ($api) {
+        $api->get('/', [MenuTypeController::class, 'index']);
+
+    });
+
+    $api->group(['prefix' => 'v1/admin/menus', 'middleware' => ['jwt', 'api']], function ($api) {
+        $api->get('/', [MenuTypeController::class, 'index']);
+        $api->post('/', [MenuController::class, 'store']);
+
+    });
 });

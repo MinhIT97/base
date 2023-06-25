@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Modules\Authorization\Entities\Permission;
 use Modules\Authorization\Entities\Role;
 use Modules\Company\Entities\Company;
+use Modules\Menu\Entities\Menu;
 
 class SeedPermissionTableSeeder extends Seeder
 {
@@ -23,6 +24,7 @@ class SeedPermissionTableSeeder extends Seeder
         $this->createPermissionRole();
         $this->createPermissionPermissionRelationShip();
         $this->createPermissionPermission();
+        $this->createPermissionMenu();
     }
 
     protected function createPermissionCompany()
@@ -122,6 +124,43 @@ class SeedPermissionTableSeeder extends Seeder
                 'slug'        => 'show-permission',
                 'description' => 'Show permission is permission to access detailed information of a permissions.',
                 'model'       => Permission::class,
+            ],
+        ], ['name']);
+    }
+
+    protected function createPermissionMenu()
+    {
+
+        Permission::query()->upsert([
+            [
+                'name'        => 'Create menu',
+                'slug'        => 'create-menu',
+                'description' => 'Create menu permission lets users create a menu',
+                'model'       => Menu::class,
+            ],
+            [
+                'name'        => 'Update menu',
+                'slug'        => 'update-menu',
+                'description' => 'Update menu is the permission that allows users to edit information about a menu.',
+                'model'       => Menu::class,
+            ],
+            [
+                'name'        => 'Delete menu',
+                'slug'        => 'delete-menu',
+                'description' => 'Delete menu permission is a right that allows users to delete a menu.',
+                'model'       => Menu::class,
+            ],
+            [
+                'name'        => 'Show menu',
+                'slug'        => 'show-menu',
+                'description' => 'Show menu is permission to access detailed information of a menu.',
+                'model'       => Menu::class,
+            ],
+            [
+                'name'        => 'Show list menu',
+                'slug'        => 'show-list-menu',
+                'description' => 'Show list menu permission grants access to the list of companies in the system',
+                'model'       => Company::class,
             ],
         ], ['name']);
     }

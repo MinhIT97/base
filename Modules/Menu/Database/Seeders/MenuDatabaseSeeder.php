@@ -2,8 +2,8 @@
 
 namespace Modules\Menu\Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Seeder;
 
 class MenuDatabaseSeeder extends Seeder
 {
@@ -16,6 +16,6 @@ class MenuDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call(MenuTypeSeedTableSeeder::class);
     }
 }
