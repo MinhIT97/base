@@ -4,26 +4,41 @@ namespace Modules\Menu\Http\Controllers\Admin;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Modules\Core\Http\Controllers\ApiController;
+use Modules\Menu\Http\Requests\Admin\ItemMenu\CreateItemMenuRequest;
+use Modules\Menu\Presenters\Admin\ItemMenuPresenter;
+use Modules\Menu\Repositories\Admin\ItemMenuRepository;
 
-class ItemMenuController extends Controller
+class ItemMenuController extends ApiController
 {
+
+    public $itemMenuRepository;
+    public $entity;
+    public $itemMenuPresenter;
+
+    public function __construct(ItemMenuRepository $itemMenuRepository)
+    {
+        $this->itemMenuRepository = $itemMenuRepository;
+        $this->entity             = $itemMenuRepository->getEntity();
+        $this->itemMenuPresenter  = new ItemMenuPresenter();
+    }
+
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('menu::index');
-    }
+        $this->authorize('itemMenuList', $this->entity);
+        $limit = $request->has('page_size') ? (int) $request->get('page_size') : 15;
+        $query = $this->itemMenuRepository;
+        $query = $this->applyConstraintsFromRequest($query, $request, ['name']);
+        $query = $this->applySearchFromRequest($query, ['name'], $request);
+        $query = $this->applyOrderByFromRequest($query, $request);
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('menu::create');
+        $itemMenus = $query->paginate($limit);
+
+        return $this->itemMenuPresenter->present($itemMenus);
     }
 
     /**
@@ -31,9 +46,15 @@ class ItemMenuController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request)
+    public function store(CreateItemMenuRequest $request)
     {
-        //
+        $this->authorize('store', $this->entity);
+
+        $data           = $request->all();
+        $data['status'] = $this->entity::ACTIVE;
+        $itemMenus      = $this->itemMenuRepository->create($data);
+
+        return $this->itemMenuPresenter->present($itemMenus);
     }
 
     /**

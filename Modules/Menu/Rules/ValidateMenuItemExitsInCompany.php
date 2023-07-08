@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Authorization\Rules;
+namespace Modules\Menu\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Modules\Authorization\Entities\Role;
+use Modules\Menu\Entities\ItemMenu;
 
-class ValidateRoleExitsInCompany implements Rule
+class ValidateMenuItemExitsInCompany implements Rule
 {
     /**
      * Create a new rule instance.
@@ -26,6 +26,7 @@ class ValidateRoleExitsInCompany implements Rule
      */
     public function passes($attribute, $value)
     {
+
         $user = request()->user();
         if (!$user) {
             return false;
@@ -33,7 +34,17 @@ class ValidateRoleExitsInCompany implements Rule
 
         $companyId = $user->company_id;
 
-        return Role::whereIn('id', $value)->where('company_id', $companyId)->count() === count($value);
+        $itemMenus = ItemMenu::find($value);
+
+        if (!$itemMenus) {
+            return false;
+        }
+
+        if (!$itemMenus->menu) {
+            return false;
+        }
+
+        return $itemMenus->menu->company_id == $companyId;
     }
 
     /**
@@ -43,6 +54,7 @@ class ValidateRoleExitsInCompany implements Rule
      */
     public function message()
     {
-        return 'One or more :attribute are invalid.';
+
+        return "The :attribute is invalid.";
     }
 }

@@ -20,7 +20,7 @@ class CreateItemMenusTable extends Migration
             $table->string('link');
             $table->string('icon')->nullable();
             $table->integer('order_by')->default(1);
-            $table->string('type');
+            $table->string('status');
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->timestamps();
 

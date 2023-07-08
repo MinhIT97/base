@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Core\Http\Controllers\ApiController;
 use Modules\Menu\Http\Requests\Admin\Menu\StoreMenuRequest;
+use Modules\Menu\Http\Requests\Admin\Menu\UpdateMenuRequest;
 use Modules\Menu\Presenters\Admin\MenuPresenter;
 use Modules\Menu\Repositories\Admin\MenuRepository;
 
@@ -39,7 +40,7 @@ class MenuController extends ApiController
 
         $menus = $query->paginate($limit);
 
-        return $this->productPresenter->present($menus);
+        return $this->menuPresenter->present($menus);
     }
 
     /**
@@ -50,9 +51,10 @@ class MenuController extends ApiController
     {
         $this->authorize('store', $this->entity);
 
-        $data = $request->all();
+        $data               = $request->all();
         $data['company_id'] = Auth::user()->company_id;
-        $menu = $this->menuRepository->create($data);
+        $data['status']     = $this->entity::ACTIVE;
+        $menu               = $this->menuRepository->create($data);
 
         return $this->menuPresenter->present($menu);
     }
@@ -64,17 +66,9 @@ class MenuController extends ApiController
      */
     public function show($id)
     {
-        return view('menu::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('menu::edit');
+        $this->authorize('show', $this->entity);
+        $menu = $this->menuRepository->find($id);
+        return $this->menuPresenter->present($menu);
     }
 
     /**
@@ -83,9 +77,15 @@ class MenuController extends ApiController
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(UpdateMenuRequest $request, $id)
     {
-        //
+        $menu = $this->menuRepository->find($id);
+        $this->authorize('update', $menu);
+
+        $data = $request->only('name');
+        $menu = $this->menuRepository->update($data, $id);
+        return $this->menuPresenter->present($menu);
+
     }
 
     /**
@@ -95,6 +95,10 @@ class MenuController extends ApiController
      */
     public function destroy($id)
     {
-        //
+        $menu = $this->menuRepository->find($id);
+        $this->authorize('destroy', $menu);
+
+        $menu->delete();
+        return $this->success();
     }
 }

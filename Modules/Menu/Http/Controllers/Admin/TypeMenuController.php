@@ -8,7 +8,7 @@ use Modules\Core\Http\Controllers\ApiController;
 use Modules\Menu\Presenters\Admin\MenuTypePresenter;
 use Modules\Menu\Repositories\Admin\MenuTypeRepository;
 
-class MenuTypeController extends ApiController
+class TypeMenuController extends ApiController
 {
 
     public $menuTypeRepository;

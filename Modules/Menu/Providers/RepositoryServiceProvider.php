@@ -3,6 +3,8 @@
 namespace Modules\Menu\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\Menu\Repositories\Admin\ItemMenuRepository;
+use Modules\Menu\Repositories\Admin\ItemMenuRepositoryEloquent;
 use Modules\Menu\Repositories\Admin\MenuRepository;
 use Modules\Menu\Repositories\Admin\MenuRepositoryEloquent;
 use Modules\Menu\Repositories\Admin\MenuTypeRepository;
@@ -19,6 +21,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(MenuRepository::class, MenuRepositoryEloquent::class);
         $this->app->bind(MenuTypeRepository::class, MenuTypeRepositoryEloquent::class);
+        $this->app->bind(ItemMenuRepository::class, ItemMenuRepositoryEloquent::class);
     }
 
     /**

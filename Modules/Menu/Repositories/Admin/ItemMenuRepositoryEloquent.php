@@ -2,15 +2,15 @@
 
 namespace Modules\Menu\Repositories\Admin;
 
-use Modules\Menu\Entities\TypeMenu;
-use Modules\Menu\Repositories\Admin\MenuTypeRepository;
+use Modules\Menu\Entities\ItemMenu;
+use Modules\Menu\Repositories\Admin\ItemMenuRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Eloquent\BaseRepository;
 
 /**
  * Class AccountantRepositoryEloquent.
  */
-class MenuTypeRepositoryEloquent extends BaseRepository implements MenuTypeRepository
+class ItemMenuRepositoryEloquent extends BaseRepository implements ItemMenuRepository
 {
     /**
      * Specify Model class name
@@ -19,7 +19,7 @@ class MenuTypeRepositoryEloquent extends BaseRepository implements MenuTypeRepos
      */
     public function model()
     {
-        return TypeMenu::class;
+        return ItemMenu::class;
     }
 
     public function getEntity()

@@ -9,9 +9,12 @@ class Menu extends Model
 {
     use HasFactory;
 
+    const ACTIVE = 1;
+
     protected $fillable = [
         'name',
         'type_menu_id',
+        'status',
         'company_id',
     ];
 

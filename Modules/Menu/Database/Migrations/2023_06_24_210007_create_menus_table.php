@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateMenusTable extends Migration
 {
@@ -18,13 +18,12 @@ class CreateMenusTable extends Migration
             $table->string('name');
             $table->unsignedBigInteger('type_menu_id');
             $table->unsignedBigInteger('company_id');
+            $table->tinyInteger('status');
             $table->timestamps();
 
             $table->foreign('type_menu_id')->references('id')->on('type_menus')->onDelete('cascade');
             $table->foreign('company_id')->references('id')->on('companies');
         });
-
-
 
     }
 

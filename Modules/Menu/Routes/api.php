@@ -11,20 +11,29 @@
 |
  */
 
+use Modules\Menu\Http\Controllers\Admin\ItemMenuController;
 use Modules\Menu\Http\Controllers\Admin\MenuController;
-use Modules\Menu\Http\Controllers\Admin\MenuTypeController;
+use Modules\Menu\Http\Controllers\Admin\TypeMenuController;
 
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
     $api->group(['prefix' => 'v1/admin/menu-types', 'middleware' => ['jwt', 'api']], function ($api) {
-        $api->get('/', [MenuTypeController::class, 'index']);
+        $api->get('/', [TypeMenuController::class, 'index']);
 
     });
 
     $api->group(['prefix' => 'v1/admin/menus', 'middleware' => ['jwt', 'api']], function ($api) {
-        $api->get('/', [MenuTypeController::class, 'index']);
+        $api->get('/', [MenuController::class, 'index']);
         $api->post('/', [MenuController::class, 'store']);
+        $api->get('/{id}', [MenuController::class, 'show']);
+        $api->patch('/{id}', [MenuController::class, 'update']);
+        $api->delete('/{id}', [MenuController::class, 'destroy']);
+    });
+
+    $api->group(['prefix' => 'v1/admin/item-menus', 'middleware' => ['jwt', 'api']], function ($api) {
+        $api->get('/', [ItemMenuController::class, 'index']);
+        $api->post('/', [ItemMenuController::class, 'store']);
 
     });
 });
