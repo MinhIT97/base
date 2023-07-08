@@ -17,7 +17,12 @@ class CreateTypeMenusTable extends Migration
             $table->id();
             $table->string('name');
             $table->tinyInteger('status');
+            $table->unsignedBigInteger('company_id');
             $table->timestamps();
+        });
+
+        Schema::table('type_menus', function (Blueprint $table) {
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 

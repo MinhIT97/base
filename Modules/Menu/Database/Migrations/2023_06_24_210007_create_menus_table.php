@@ -17,9 +17,11 @@ class CreateMenusTable extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('type_menu_id');
+            $table->unsignedBigInteger('company_id');
             $table->timestamps();
 
             $table->foreign('type_menu_id')->references('id')->on('type_menus')->onDelete('cascade');
+            $table->foreign('company_id')->references('id')->on('companies');
         });
 
 

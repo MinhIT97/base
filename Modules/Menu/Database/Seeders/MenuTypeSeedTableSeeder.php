@@ -22,6 +22,7 @@ class MenuTypeSeedTableSeeder extends Seeder
                 'id'     => 1,
                 'name'   => 'Header',
                 'status' => 1,
+                'company_id' => 1,
             ],
         ], ['id']);
 

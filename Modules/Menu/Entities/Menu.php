@@ -12,6 +12,7 @@ class Menu extends Model
     protected $fillable = [
         'name',
         'type_menu_id',
+        'company_id',
     ];
 
 }

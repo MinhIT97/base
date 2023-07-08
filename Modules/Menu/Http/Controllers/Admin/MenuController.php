@@ -4,6 +4,7 @@ namespace Modules\Menu\Http\Controllers\Admin;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Core\Http\Controllers\ApiController;
 use Modules\Menu\Http\Requests\Admin\Menu\StoreMenuRequest;
 use Modules\Menu\Presenters\Admin\MenuPresenter;
@@ -50,6 +51,7 @@ class MenuController extends ApiController
         $this->authorize('store', $this->entity);
 
         $data = $request->all();
+        $data['company_id'] = Auth::user()->company_id;
         $menu = $this->menuRepository->create($data);
 
         return $this->menuPresenter->present($menu);
