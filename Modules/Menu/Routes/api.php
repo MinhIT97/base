@@ -34,6 +34,8 @@ $api->version('v1', function ($api) {
     $api->group(['prefix' => 'v1/admin/item-menus', 'middleware' => ['jwt', 'api']], function ($api) {
         $api->get('/', [ItemMenuController::class, 'index']);
         $api->post('/', [ItemMenuController::class, 'store']);
-
+        $api->get('/{id}', [ItemMenuController::class, 'show']);
+        $api->patch('/{id}', [ItemMenuController::class, 'update']);
+        $api->delete('/{id}', [ItemMenuController::class, 'destroy']);
     });
 });

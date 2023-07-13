@@ -6,8 +6,10 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Modules\Core\Http\Controllers\ApiController;
 use Modules\Menu\Http\Requests\Admin\ItemMenu\CreateItemMenuRequest;
+use Modules\Menu\Http\Requests\Admin\ItemMenu\UpdateItemMenuRequest;
 use Modules\Menu\Presenters\Admin\ItemMenuPresenter;
 use Modules\Menu\Repositories\Admin\ItemMenuRepository;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ItemMenuController extends ApiController
 {
@@ -64,17 +66,12 @@ class ItemMenuController extends ApiController
      */
     public function show($id)
     {
-        return view('menu::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('menu::edit');
+        $this->authorize('show', $this->entity);
+        $itemMenus = $this->itemMenuRepository->where('id', $id)->first();
+        if (!$itemMenus) {
+            throw new NotFoundHttpException('Item menu not found');
+        }
+        return $this->itemMenuPresenter->present($itemMenus);
     }
 
     /**
@@ -83,9 +80,18 @@ class ItemMenuController extends ApiController
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(UpdateItemMenuRequest $request, $id)
     {
-        //
+        $itemMenus = $this->itemMenuRepository->where('id', $id)->first();
+
+        if (!$itemMenus) {
+            throw new NotFoundHttpException('Item menu not found');
+        }
+
+        $this->authorize('update', $itemMenus);
+        $data      = $request->only('menu_id', 'label', 'link', 'icon', 'order_by', 'parent_id');
+        $itemMenus = $this->itemMenuRepository->update($data, $id);
+        return $this->itemMenuPresenter->present($itemMenus);
     }
 
     /**
@@ -95,6 +101,15 @@ class ItemMenuController extends ApiController
      */
     public function destroy($id)
     {
-        //
+        $itemMenus = $this->itemMenuRepository->where('id', $id)->first();
+
+        if (!$itemMenus) {
+            throw new NotFoundHttpException('Item menu not found');
+        }
+
+        $this->authorize('destroy', $itemMenus);
+
+        $itemMenus->delete();
+        return $this->success();
     }
 }
