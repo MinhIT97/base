@@ -1,5 +1,6 @@
 <?php
 
+use Modules\Core\Console\CreateBaseClass;
 use Modules\Core\Console\CreatePresenterCommand;
 use Modules\Core\Console\CreateRepositoryCommand;
 use Modules\Core\Console\CreateServiceCommand;
@@ -196,7 +197,8 @@ return [
         CreateServiceCommand::class,
         CreateTraitCommand::class,
         CreateTransformerCommand::class,
-        CreatePresenterCommand::class
+        CreatePresenterCommand::class,
+        CreateBaseClass::class
     ],
 
     /*

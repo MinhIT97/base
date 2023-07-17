@@ -20,7 +20,7 @@ $api->version('v1', function ($api) {
         $api->post('/', [ProductController::class, 'store']);
         $api->get('/', [ProductController::class, 'index']);
         $api->get('/{id}', [ProductController::class, 'show']);
-        $api->put('/{id}', [ProductController::class, 'update']);
+        $api->patch('/{id}', [ProductController::class, 'update']);
         $api->delete('/{id}', [ProductController::class, 'destroy']);
     });
 });

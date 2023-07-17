@@ -112,7 +112,7 @@ class CreateTransformerCommand extends Command
         $file_path = $transfomerFolderPath . '/' . $class_name . 'Transformer.php';
 
         if ($file_system->isFile($file_path)) {
-            throw new Exception('Trait already existed');
+            throw new Exception('Transfomer already existed');
         }
 
         $file_system->put($file_path, $traitFemplate);

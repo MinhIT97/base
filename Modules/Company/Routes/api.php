@@ -21,7 +21,7 @@ $api->version('v1', function ($api) {
         $api->post('/', [CompanyController::class, 'store']);
         $api->get('/', [CompanyController::class, 'index']);
         $api->get('/{id}', [CompanyController::class, 'show']);
-        $api->put('/{id}', [CompanyController::class, 'update']);
+        $api->patch('/{id}', [CompanyController::class, 'update']);
         $api->delete('/{id}', [CompanyController::class, 'destroy']);
     });
 });

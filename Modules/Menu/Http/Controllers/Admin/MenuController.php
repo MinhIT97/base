@@ -66,8 +66,9 @@ class MenuController extends ApiController
      */
     public function show($id)
     {
-        $this->authorize('show', $this->entity);
         $menu = $this->menuRepository->find($id);
+        $this->authorize('show', $menu);
+
         return $this->menuPresenter->present($menu);
     }
 

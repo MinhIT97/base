@@ -56,7 +56,7 @@ class CreatePresenterCommand extends Command
             return 1;
         }
 
-        $this->info('Transformer generate successful');
+        $this->info('Presenter generate successful');
 
         return 0;
     }
@@ -109,7 +109,7 @@ class CreatePresenterCommand extends Command
         $file_path = $transfomerFolderPath . '/' . $className . 'Presenter.php';
 
         if ($file_system->isFile($file_path)) {
-            throw new Exception('Trait already existed');
+            throw new Exception('Presenter already existed');
         }
 
         $file_system->put($file_path, $traitFemplate);

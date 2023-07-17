@@ -66,11 +66,13 @@ class ItemMenuController extends ApiController
      */
     public function show($id)
     {
-        $this->authorize('show', $this->entity);
         $itemMenus = $this->itemMenuRepository->where('id', $id)->first();
         if (!$itemMenus) {
             throw new NotFoundHttpException('Item menu not found');
         }
+
+        $this->authorize('show', $itemMenus);
+
         return $this->itemMenuPresenter->present($itemMenus);
     }
 

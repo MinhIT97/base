@@ -3,7 +3,6 @@
 namespace Modules\Category\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory;
 
 class CategoryServiceProvider extends ServiceProvider
 {
@@ -38,6 +37,8 @@ class CategoryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
+        $this->app->register(PolicyProvider::class);
+        $this->app->register(RepositoryServiceProvider::class);
     }
 
     /**
@@ -67,7 +68,7 @@ class CategoryServiceProvider extends ServiceProvider
         $sourcePath = module_path($this->moduleName, 'Resources/views');
 
         $this->publishes([
-            $sourcePath => $viewPath
+            $sourcePath => $viewPath,
         ], ['views', $this->moduleNameLower . '-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);

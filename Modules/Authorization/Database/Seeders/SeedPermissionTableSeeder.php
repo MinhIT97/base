@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Modules\Authorization\Entities\Permission;
 use Modules\Authorization\Entities\Role;
+use Modules\Category\Entities\Category;
 use Modules\Company\Entities\Company;
+use Modules\Menu\Entities\ItemMenu;
 use Modules\Menu\Entities\Menu;
 
 class SeedPermissionTableSeeder extends Seeder
@@ -160,7 +162,80 @@ class SeedPermissionTableSeeder extends Seeder
                 'name'        => 'Show list menu',
                 'slug'        => 'show-list-menu',
                 'description' => 'Show list menu permission grants access to the list of companies in the system',
-                'model'       => Company::class,
+                'model'       => Menu::class,
+            ],
+        ], ['name']);
+    }
+    protected function createPermissionItemMenu()
+    {
+
+        Permission::query()->upsert([
+            [
+                'name'        => 'Create item menu',
+                'slug'        => 'create-item-menu',
+                'description' => 'Create item menu permission lets users create a item menu',
+                'model'       => ItemMenu::class,
+            ],
+            [
+                'name'        => 'Update item menu',
+                'slug'        => 'update-item-menu',
+                'description' => 'Update item menu is the permission that allows users to edit information about a item menu.',
+                'model'       => ItemMenu::class,
+            ],
+            [
+                'name'        => 'Delete item menu',
+                'slug'        => 'delete-item-menu',
+                'description' => 'Delete item menu permission is a right that allows users to delete a item menu.',
+                'model'       => ItemMenu::class,
+            ],
+            [
+                'name'        => 'Show item menu',
+                'slug'        => 'show-item-menu',
+                'description' => 'Show item menu is permission to access detailed information of a item menu.',
+                'model'       => ItemMenu::class,
+            ],
+            [
+                'name'        => 'Show list item menu',
+                'slug'        => 'show-list-item-menu',
+                'description' => 'Show list item menu permission grants access to the list of item menu in the system',
+                'model'       => ItemMenu::class,
+            ],
+        ], ['name']);
+    }
+
+    protected function createPermissionCategory()
+    {
+
+        Permission::query()->upsert([
+            [
+                'name'        => 'Create category',
+                'slug'        => 'create-category',
+                'description' => 'Create category permission lets users create a category',
+                'model'       => Category::class,
+            ],
+            [
+                'name'        => 'Update category',
+                'slug'        => 'update-category',
+                'description' => 'Update category is the permission that allows users to edit information about a category.',
+                'model'       => Category::class,
+            ],
+            [
+                'name'        => 'Delete category',
+                'slug'        => 'delete-category',
+                'description' => 'Delete category permission is a right that allows users to delete a category.',
+                'model'       => Category::class,
+            ],
+            [
+                'name'        => 'Show category',
+                'slug'        => 'show-category',
+                'description' => 'Show category is permission to access detailed information of a category.',
+                'model'       => Category::class,
+            ],
+            [
+                'name'        => 'Show list category',
+                'slug'        => 'show-list-category',
+                'description' => 'Show list category permission grants access to the list of companies in the system',
+                'model'       => Category::class,
             ],
         ], ['name']);
     }

@@ -23,7 +23,7 @@ $api->version('v1', function ($api) {
         $api->get('/', [RoleController::class, 'list']);
         $api->post('/', [RoleController::class, 'store']);
         $api->get('/{id}', [RoleController::class, 'show']);
-        $api->put('/{id}', [RoleController::class, 'update']);
+        $api->patch('/{id}', [RoleController::class, 'update']);
         $api->delete('/{id}', [RoleController::class, 'destroy']);
         $api->post('/{id}/permissions/attach', [RoleRelationShipController::class, 'attachPermissions']);
         $api->post('/{id}/permissions/detach', [RoleRelationShipController::class, 'detachPermissions']);

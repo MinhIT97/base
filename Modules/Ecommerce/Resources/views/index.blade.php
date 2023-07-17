@@ -1,6 +1,7 @@
 @extends('ecommerce::layouts.master')
 
 @section('content')
+
 <div class="page-wrapper">
     <header class="header header-14">
         <div class="header-top">
