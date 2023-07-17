@@ -2,6 +2,7 @@
 
 namespace Modules\Post\Presenters\Admin;
 
+use Modules\Post\Transformers\Admin\PostTransformer;
 use Prettus\Repository\Presenter\FractalPresenter;
 
 /**
