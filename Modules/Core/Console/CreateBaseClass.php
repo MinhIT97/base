@@ -57,7 +57,14 @@ class CreateBaseClass extends Command
             'transformer' =>  $folder ,
             'module' =>  $module
         ]);
-
+        $this->call('module:make-policy',[
+            'name' =>  $folder.'Policy' ,
+            'module' =>  $module
+        ]);
+        $this->call('module:make-controller',[
+            'controller' =>  $folder.'Controller' ,
+            'module' =>  $module
+        ]);
     }
 
     /**
