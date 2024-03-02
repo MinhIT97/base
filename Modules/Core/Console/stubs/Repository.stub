@@ -9,5 +9,5 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface {{name}}Repository extends RepositoryInterface
 {
-    //
+    public function getEntity();
 }

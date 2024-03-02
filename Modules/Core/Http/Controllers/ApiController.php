@@ -13,15 +13,27 @@ use Illuminate\Support\Facades\App;
 use League\Fractal\TransformerAbstract;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+/**
+ * @OA\Info(
+ *      version="1.0.",
+ *      title="Mind+ Api Documentation",
+ *      description="Api doc for developer and 3rd party",
+ * )
+ *
+ * @OA\Server(
+ *      url=L5_SWAGGER_CONST_HOST,
+ *      description="Mind+ API Server"
+ * )
+ */
 class ApiController extends Controller
 {
     use Helpers, HandlesAuthorization, AuthorizesRequests;
 
     protected $upload_directory = 'uploads';
 
-    public function success()
+    public function success($message = '')
     {
-        return $this->response->array(['success' => true]);
+        return $this->response->array(['success' => true, 'message' => $message]);
     }
 
     public function simplePaginator(Paginator $paginator, TransformerAbstract $transformer)
@@ -102,10 +114,60 @@ class ApiController extends Controller
 
             // Lấy các phần tử trong mảng $constraints theo các khóa đã cho
             $constraintsCollect = collect($constraints)->only($keyFilter)->toArray();
-
             if (!empty($constraintsCollect)) {
                 $query = $query->where($constraintsCollect);
             }
+        }
+
+        return $query;
+    }
+
+    public function applyConstraintsRelationFromRequest($query, Request $request, $keyFilter)
+    {
+        if ($request->has('constraints')) {
+            $constraints = (array) ($request->get('constraints'));
+
+            foreach ($keyFilter as $filter) {
+                $relation  = $filter[0];
+                $keyFilter = $filter[1];
+                $keyQuery  = $filter[2];
+                $operators = @$filter[3];
+
+                $constraintsCollect = collect($constraints)->only($keyFilter)->toArray();
+
+                if (!empty($constraintsCollect)) {
+                    $value = @$constraintsCollect[$keyFilter];
+                    $query = $query->whereHas($relation, function ($q) use ($keyQuery, $value, $operators) {
+
+                        if (!empty($operators)) {
+                            $q->where($keyQuery, $operators, $value);
+                        } else {
+                            $q->where($keyQuery, $value);
+                        }
+
+                    });
+                }
+            }
+        }
+
+        return $query;
+    }
+
+    public function applyConstraintsFromRequestWithOperators($query, Request $request, $keyFilter)
+    {
+        if ($request->has('constraints')) {
+            $constraints = (array) ($request->get('constraints'));
+
+            // Lấy các phần tử trong mảng $constraints theo các khóa đã cho
+
+            foreach ($keyFilter as $key => $filter) {
+                $value = @$constraints[$key];
+
+                if (!empty($value)) {
+                    $query = $query->where($key, $filter, $value);
+                }
+            }
+
         }
 
         return $query;
@@ -126,6 +188,25 @@ class ApiController extends Controller
                 });
             }
         }
+        return $query;
+    }
+
+    public function applyQueryByRole($query, $user, array $roles)
+    {
+        $hasRole = false;
+
+        foreach ($roles as $role => $key) {
+            if ($user->hasRole($role)) {
+                $hasRole = true;
+                $query->where($key, $user->id);
+                break;
+            }
+        }
+
+        if (!$hasRole) {
+            $query->where('id', null);
+        }
+
         return $query;
     }
 

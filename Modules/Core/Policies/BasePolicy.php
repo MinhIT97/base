@@ -23,6 +23,6 @@ class BasePolicy
         // if (!config('app.permissions_enabled', false)) {
         //     return false;
         // }
-        return true;
+        // return false;
     }
 }

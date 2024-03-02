@@ -41,12 +41,17 @@ class CreateBaseClass extends Command
     {
         $module = $this->argument('module');
         $folder = $this->argument('folder');
+
+        $lastFolder =  explode('/' , $folder);
+        $lastFolder =  end($lastFolder );
+
+
         $this->call('module:make-presenter',[
-            'presenter' =>  $folder ,
+            'presenter' =>  $lastFolder ,
             'module' =>  $module
         ]);
         $this->call('module:make-repository',[
-            'repository' =>  $folder ,
+            'repository' =>  $lastFolder ,
             'module' =>  $module
         ]);
         $this->call('module:make-service',[
@@ -54,15 +59,27 @@ class CreateBaseClass extends Command
             'module' =>  $module
         ]);
         $this->call('module:make-transformer',[
-            'transformer' =>  $folder ,
+            'transformer' =>  $lastFolder ,
             'module' =>  $module
         ]);
         $this->call('module:make-policy',[
-            'name' =>  $folder.'Policy' ,
+            'name' =>  $lastFolder.'Policy' ,
             'module' =>  $module
         ]);
         $this->call('module:make-controller',[
             'controller' =>  $folder.'Controller' ,
+            'module' =>  $module
+        ]);
+        $this->call('module:make-provider',[
+            'name' =>  'PolicyServiceProvider' ,
+            'module' =>  $module
+        ]);
+        $this->call('module:make-provider',[
+            'name' =>  'RepositoryServiceProvider' ,
+            'module' =>  $module
+        ]);
+        $this->call('module:make-model',[
+            'model' =>  $lastFolder ,
             'module' =>  $module
         ]);
     }
