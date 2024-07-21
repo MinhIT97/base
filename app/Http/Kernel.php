@@ -4,6 +4,7 @@ namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Modules\Core\Http\Middleware\JwtMiddleware;
+use Modules\Log\Http\Middleware\LogUserActions;
 
 class Kernel extends HttpKernel
 {
@@ -38,6 +39,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            LogUserActions::class,
         ],
 
         'api' => [
@@ -65,5 +67,6 @@ class Kernel extends HttpKernel
         'throttle'         => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified'         => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'jwt'              => JwtMiddleware::class,
+        'log.user.actions' => LogUserActions::class,
     ];
 }

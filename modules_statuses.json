@@ -10,5 +10,6 @@
     "Category": true,
     "Tag": true,
     "Menu": true,
-    "Log": true
+    "Log": true,
+    "Exception": true
 }

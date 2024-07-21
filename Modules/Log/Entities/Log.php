@@ -9,10 +9,10 @@ class Log extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
-    
-    protected static function newFactory()
-    {
-        return \Modules\Log\Database\factories\LogFactory::new();
-    }
+    protected $fillable = ['user_id', 'action', 'details'];
+
+    protected $casts = [
+        'details' => 'array',
+    ];
+
 }
