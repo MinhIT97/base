@@ -11,5 +11,6 @@
     "Tag": true,
     "Menu": true,
     "Log": true,
-    "Exception": true
+    "Exception": true,
+    "Media": true
 }
