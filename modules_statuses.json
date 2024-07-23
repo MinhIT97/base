@@ -12,5 +12,6 @@
     "Menu": true,
     "Log": true,
     "Exception": true,
-    "Media": true
+    "Media": true,
+    "Admin": true
 }
