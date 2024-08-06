@@ -1,29 +1,47 @@
-FROM php:8.1 as php
+# Stage 1: Build PHP
+FROM php:8.0-fpm AS php
 
-RUN apt-get update -y
-RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev
-RUN docker-php-ext-install pdo pdo_mysql bcmath
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libzip-dev \
+    zip \
+    unzip
 
-RUN pecl install -o -f redis \
-    && rm -rf /tmp/pear \
-    && docker-php-ext-enable redis
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install mysqli pdo pdo_mysql zip
 
+# Set working directory
 WORKDIR /var/www
-COPY . .
+# Cài đặt Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Copy application files
+COPY . /var/www
 
-COPY --from=composer:2.3.5 /usr/bin/composer /usr/bin/composer
+# Set permissions
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www
 
-ENV PORT=8000
-ENTRYPOINT [ "docker/entrypoint.sh" ]
+# Cài đặt các phụ thuộc PHP
+RUN composer install
 
-# ==============================================================================
-#  node
-FROM node:14-alpine as node
+# Expose port 9000 and start php-fpm server
+EXPOSE 9000
+CMD ["php-fpm"]
 
-WORKDIR /var/www
-COPY . .
+# Stage 2: Nginx
+FROM nginx:latest AS nginx
 
-RUN npm install --global cross-env
-RUN npm install
+# Copy Nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY conf.d /etc/nginx/conf.d
 
-VOLUME /var/www/node_modules
+# Copy application files
+COPY --from=php /var/www /var/www
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

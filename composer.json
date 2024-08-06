@@ -20,6 +20,7 @@
         "laravel/telescope": "^4.14",
         "laravel/tinker": "^2.5",
         "league/fractal": "v0.19",
+        "maatwebsite/excel": "^1.1",
         "nwidart/laravel-modules": "^8.3",
         "prettus/l5-repository": "^2.9",
         "tymon/jwt-auth": "^1.0"
