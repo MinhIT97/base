@@ -29,6 +29,10 @@ RUN chown -R www-data:www-data /var/www \
 # Cài đặt các phụ thuộc PHP
 RUN composer install
 
+RUN chown -R www-data:www-data  /var/www/storage  /var/www/bootstrap/cache
+
+RUN php artisan cache:clear
+RUN php artisan optimize
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 CMD ["php-fpm"]
